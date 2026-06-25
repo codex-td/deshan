@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SkillNest · English Learning Platform</title>
+  <meta name="description" content="SkillNest – Premium English tuition by Ms. Madhavi Rathnayake. O/L, A/L, Spoken English. Physical classes in Badulla, Sri Lanka.">
+  <meta name="keywords" content="English tuition Badulla, O/L English, A/L English, SkillNest, Madhavi Rathnayake">
+  <meta name="author" content="SkillNest | Thuli UMR">
+  <meta name="google-site-verification" content="e5nRg5nlmSJ735A9bMwL9XHcQ8s4QOcj8j-MT7VyqrU">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/English/manifest.json">
+  <meta name="theme-color" content="#060B14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SkillNest">
+  <link rel="apple-touch-icon" href="image/icon.png">
+  <link rel="shortcut icon" href="image/icon.png" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <script>
+    if ('serviceWorker' in navigator)
+      window.addEventListener('load', () => navigator.serviceWorker.register('/English/sw.js').catch(()=>{}));
+  </script>
+</head>
+<body>
+
+<!-- WebGL Background -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ── LOADER ── -->
+<div id="loader">
+  <div class="ld-ring"></div>
+  <div class="ld-logo">
+    <img src="image/icon.png" alt="SkillNest" onerror="this.style.display='none'">
+    SkillNest
+  </div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+  <p class="ld-text">Initializing learning environment…</p>
+</div>
+
+<!-- ── APP ── -->
+<div id="app" style="opacity:0;transition:opacity .7s ease;">
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav" id="mobileNav">
+    <button class="mnav-close" id="closeMenuBtn"><i class="fas fa-xmark"></i></button>
+    <div class="mnav-logo">
+      <img src="image/icon.png" alt="" onerror="this.style.display='none'"> SkillNest
+    </div>
+    <ul>
+      <li><a href="#" id="mHome"><i class="fas fa-house"></i> Home</a></li>
+      <li><a href="#" id="mTeacher"><i class="fas fa-chalkboard-user"></i> Teacher</a></li>
+      <li><a href="#" id="mCourses"><i class="fas fa-book-open"></i> Courses</a></li>
+      <li><a href="#" id="mResources"><i class="fas fa-download"></i> Resources</a></li>
+      <li><a href="#" id="mApp"><i class="fas fa-mobile-screen-button"></i> Get App</a></li>
+      <li><a href="#" id="mContact"><i class="fab fa-whatsapp"></i> Contact</a></li>
+      <li><a href="My English student.html" class="mnav-cta"><i class="fas fa-right-to-bracket"></i> Student Login</a></li>
+    </ul>
+    <div class="mnav-theme" data-theme-toggle>
+      <i class="fas fa-moon theme-icon"></i> Toggle Mode
+    </div>
+  </nav>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="bn-item active" data-nav="home"><i class="fas fa-house"></i><span>Home</span></div>
+    <div class="bn-item" data-nav="teacher"><i class="fas fa-chalkboard-user"></i><span>Teacher</span></div>
+    <div class="bn-item" data-nav="courses"><i class="fas fa-book-open"></i><span>Classes</span></div>
+    <div class="bn-item" data-nav="timetable"><i class="fas fa-calendar-days"></i><span>Schedule</span></div>
+    <div class="bn-item" data-theme-toggle><i class="fas fa-moon theme-icon"></i><span>Mode</span></div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- NAVBAR -->
+    <header class="navbar" id="navbar">
+      <div class="nav-brand" id="logoClick">
+        <img src="image/icon.png" alt="SkillNest" onerror="this.style.display='none'">
+        SkillNest
+      </div>
+      <nav class="nav-links">
+        <a href="#" id="navHome">Home</a>
+        <a href="#" id="navCourses">Courses</a>
+        <a href="#" id="navTeacher">Teacher</a>
+        <a href="#" id="navApp"><i class="fas fa-mobile-screen-button"></i> Get App</a>
+        <a href="#" id="navContact">Contact</a>
+        <a href="My English student.html" class="nav-cta">
+          <i class="fas fa-right-to-bracket"></i> Student Login
+        </a>
+        <button class="nav-theme" data-theme-toggle><i class="fas fa-moon theme-icon"></i></button>
+      </nav>
+      <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <!-- SLIDER -->
+    <div class="slider-wrap">
+      <div class="slider-track" id="sliderTrack"></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-pill">
+          <span class="pill-live"></span>
+          Friendly · Expert · Results-driven
+        </div>
+        <h1 class="hero-h1">
+          English with<br>
+          <em>Confidence</em>
+        </h1>
+        <p class="hero-sub">
+          Qualified Government School English Teacher<br>
+          O/L &amp; A/L Examiner · Badulla, Sri Lanka
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" id="heroJoinBtn">
+            <i class="fab fa-whatsapp"></i> Join a Class
+          </button>
+          <button class="btn-ghost" id="heroCoursesBtn">
+            View Courses <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3D Canvas + floating info cards -->
+      <div class="hero-right">
+        <canvas id="hero-canvas"></canvas>
+
+        <div class="float-card fc-1">
+          <span class="fc-label">Students</span>
+          <span class="fc-val">50+ <span class="fc-dot" style="background:#2DD4BF;"></span></span>
+          <span class="fc-sub">Active this year</span>
+        </div>
+        <div class="float-card fc-2">
+          <span class="fc-label">Pass Rate</span>
+          <span class="fc-val" style="color:#38BDF8;">99%</span>
+          <span class="fc-sub">O/L &amp; A/L exams</span>
+        </div>
+        <div class="float-card fc-3">
+          <span class="fc-label">Experience</span>
+          <span class="fc-val" style="color:#22D3EE;">8 Years</span>
+          <span class="fc-sub">Govt. Certified</span>
+        </div>
+        <div class="float-card fc-4">
+          <span class="fc-label">Location</span>
+          <span class="fc-val" style="font-size:.8rem;">Badulla 📍</span>
+          <span class="fc-sub">Sat &amp; Sun 8AM–12PM</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-band card reveal">
+      <div class="sb-item">
+        <span class="sb-num" data-target="50" data-suffix="+">0</span>
+        <span class="sb-label">Active Students</span>
+        <span class="sb-sub">↑ +23% this year</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-num" data-target="99" data-suffix="%">0</span>
+        <span class="sb-label">Pass Rate</span>
+        <span class="sb-sub">O/L &amp; A/L exams</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-num" data-target="8" data-suffix="">0</span>
+        <span class="sb-label">Years Teaching</span>
+        <span class="sb-sub">Certified educator</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-num" data-target="100" data-suffix="+">0</span>
+        <span class="sb-label">Students Guided</span>
+        <span class="sb-sub">&amp; still counting</span>
+      </div>
+    </div>
+
+    <!-- TEACHER -->
+    <section class="section" id="teacherSection">
+      <div class="sec-label">Your Educator</div>
+      <h2 class="sec-h2">Meet Ms. Madhavi</h2>
+
+      <div class="teacher-grid">
+        <div class="teacher-profile-card card reveal">
+          <div class="t-img-wrap">
+            <img src="image/teacher image.jpg" alt="Ms. Madhavi Rathnayake" class="t-photo"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="t-fallback"><i class="fas fa-user-graduate"></i></div>
+            <div class="t-ring"></div>
+            <div class="t-ring t-ring-2"></div>
+          </div>
+          <h3 class="t-name">Ms. Madhavi Rathnayake</h3>
+          <p class="t-title"><i class="fas fa-certificate"></i> Qualified Government School English Teacher</p>
+          <ul class="qual-list">
+            <li><span class="q-dot" style="background:#FCD34D"></span>BEd in English — Global Straford Campus</li>
+            <li><span class="q-dot" style="background:#2DD4BF"></span>O/L &amp; A/L Answer Sheet Examiner</li>
+            <li><span class="q-dot" style="background:#38BDF8"></span>Government School English Teacher</li>
+          </ul>
+          <div class="t-contacts">
+            <a href="tel:+94767899845" class="t-contact-row"><i class="fas fa-phone"></i>+94 76 789 9845</a>
+            <a href="mailto:madhaviupeksha17@gmail.com" class="t-contact-row"><i class="fas fa-envelope"></i>madhaviupeksha17@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="teacher-info-card card reveal">
+          <div class="ti-block">
+            <h4 class="ti-head"><i class="fas fa-map-pin"></i> Location</h4>
+            <div class="ti-rows">
+              <div class="ti-row"><span>Venue</span><strong>Salusala, Badulla</strong></div>
+              <div class="ti-row"><span>Type</span><strong>Physical Classes</strong></div>
+              <div class="ti-row"><span>Country</span><strong>Sri Lanka</strong></div>
+            </div>
+          </div>
+          <div class="ti-block">
+            <h4 class="ti-head"><i class="fas fa-calendar-week"></i> Schedule</h4>
+            <div class="ti-rows">
+              <div class="ti-row"><span>Saturday</span><strong>8:00 AM – 12:00 PM</strong></div>
+              <div class="ti-row"><span>Sunday</span><strong>8:00 AM – 12:00 PM</strong></div>
+            </div>
+          </div>
+          <div class="ti-block">
+            <h4 class="ti-head"><i class="fas fa-gift"></i> Student Benefits</h4>
+            <div class="benefit-chips">
+              <span>Weekly Reports</span><span>1-on-1 Mentoring</span>
+              <span>Worksheets</span><span>Past Papers</span>
+              <span>Examiner Tips</span><span>Monthly Tests</span>
+            </div>
+          </div>
+          <a href="https://wa.me/94767899845" class="btn-wa" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Message on WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- COURSES -->
+    <section class="section" id="coursesSection">
+      <div class="sec-label">Curriculum</div>
+      <h2 class="sec-h2">Our Classes</h2>
+
+      <div class="courses-grid" id="coursesGrid">
+        <div class="card course-card reveal" data-course="Grade 1-5 Beginner" data-schedule="Sat &amp; Sun 8:00–10:00 AM" data-price="LKR 1000/mo">
+          <div class="cc-icon">📘</div>
+          <div class="cc-badge">Grammar + Vocabulary</div>
+          <h3>Grade 1–5 Beginner</h3>
+          <p>Build strong English fundamentals through fun, interactive activities for young learners.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Sat &amp; Sun · 8:00–10:00 AM</span><span class="cc-price">LKR 1,000/mo</span></div>
+          <button class="btn-enroll enrollBtn">Enroll Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="card course-card reveal" data-course="Grade 6-9 Foundation" data-schedule="Sat &amp; Sun 8:00–10:00 AM" data-price="LKR 1000/mo">
+          <div class="cc-icon">📗</div>
+          <div class="cc-badge">Grammar + Writing</div>
+          <h3>Grade 6–9 Foundation</h3>
+          <p>Structured sessions to strengthen core English skills with interactive methodology.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Sat &amp; Sun · 8:00–10:00 AM</span><span class="cc-price">LKR 1,000/mo</span></div>
+          <button class="btn-enroll enrollBtn">Enroll Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="card course-card reveal" data-course="O/L English" data-schedule="Sat &amp; Sun 10:00 AM–12:00 PM" data-price="LKR 1000/mo">
+          <div class="cc-icon">🎯</div>
+          <div class="cc-badge gold">Exam Focus</div>
+          <h3>O/L English</h3>
+          <p>Past papers, writing mastery, listening &amp; speaking — taught by an actual O/L examiner.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Sat &amp; Sun · 10:00 AM–12:00 PM</span><span class="cc-price">LKR 1,000/mo</span></div>
+          <button class="btn-enroll enrollBtn">Enroll Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="card course-card reveal" data-course="A/L General English" data-schedule="Sat &amp; Sun 8:00 AM–12:00 PM" data-price="LKR 2000/mo">
+          <div class="cc-icon">📕</div>
+          <div class="cc-badge violet">Advanced Level</div>
+          <h3>A/L General English</h3>
+          <p>Critical thinking, essay writing, literature analysis &amp; academic vocabulary mastery.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Sat &amp; Sun · 8:00 AM–12:00 PM</span><span class="cc-price">LKR 2,000/mo</span></div>
+          <button class="btn-enroll enrollBtn">Enroll Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="card course-card reveal" data-course="Spoken English" data-schedule="Weekend Batches" data-price="Custom Pricing">
+          <div class="cc-icon">🗣️</div>
+          <div class="cc-badge">Fluency</div>
+          <h3>Spoken English</h3>
+          <p>Real conversation practice, pronunciation coaching &amp; confidence building for all ages.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Weekend Batches</span><span class="cc-price">Custom</span></div>
+          <button class="btn-enroll enrollBtn">Enroll Now <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="card course-card course-locked reveal" id="olPaperClassCard"
+          data-course="O/L Paper Class (December Start)"
+          data-schedule="Weekly Sessions | Dec Batch"
+          data-price="LKR 1500/mo">
+          <div class="cc-icon">📝</div>
+          <div class="cc-badge rose">Dec Intake</div>
+          <h3>O/L Paper Class <span class="seasonal-tag">Seasonal</span></h3>
+          <p>Past papers + model papers + examiner tips. Open to everyone, even those not in O/L class.</p>
+          <div class="cc-meta"><span><i class="fas fa-clock"></i>Starts December</span><span class="cc-price">LKR 1,500/mo</span></div>
+          <button class="btn-enroll" id="olPaperEnrollBtn" disabled>
+            <i class="fas fa-lock"></i> Opens Sep 1
+          </button>
+          <p id="olPaperCountdown" class="cc-countdown"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section class="section" id="downloadSection">
+      <div class="sec-label">Study Materials</div>
+      <h2 class="sec-h2">Resources</h2>
+      <div class="res-grid">
+        <div class="card res-card reveal">
+          <div class="rc-icon" style="color:#22D3EE"><i class="fas fa-file-lines fa-2x"></i></div>
+          <div class="rc-body">
+            <h3>Syllabus 2026</h3>
+            <p>Complete curriculum &amp; learning roadmap updated for the new syllabus.</p>
+          </div>
+          <a href="files.html" class="btn-res">Download <i class="fas fa-arrow-down"></i></a>
+        </div>
+        <div class="card res-card reveal">
+          <div class="rc-icon" style="color:#38BDF8"><i class="fas fa-book-open fa-2x"></i></div>
+          <div class="rc-body">
+            <h3>E-Books Library</h3>
+            <p>15+ curated English reference books for exam mastery.</p>
+          </div>
+          <a href="files.html" class="btn-res">Access <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOBILE APP -->
+    <section class="section" id="appSection">
+      <div class="sec-label">Learn On The Go</div>
+      <h2 class="sec-h2">Get the SkillNest App</h2>
+
+      <div class="app-card card reveal">
+        <div class="app-card-left">
+          <div class="app-icon-wrap">
+            <div class="app-icon-glow"></div>
+            <img src="image/icon.png" alt="SkillNest App" class="app-icon" onerror="this.style.display='none'">
+          </div>
+          <div class="app-info">
+            <h3>SkillNest Mobile App</h3>
+            <p>Carry your classes, resources &amp; updates in your pocket — built for Android.</p>
+            <div class="app-meta">
+              <span><i class="fab fa-android"></i> Android</span>
+              <span><i class="fas fa-code-branch"></i> v1.0</span>
+              <span><i class="fas fa-hard-drive"></i> ~15 MB</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-card-right">
+          <!-- ⚠️ REPLACE THE LINK BELOW with your real Google Drive share link once the APK is uploaded ⚠️ -->
+          <a href="https://drive.google.com/file/d/REPLACE_WITH_YOUR_FILE_ID/view?usp=sharing"
+             class="btn-primary btn-app-download" id="apkDownloadBtn" target="_blank" rel="noopener">
+            <i class="fas fa-download"></i> Download APK
+          </a>
+          <p class="app-note"><i class="fas fa-circle-info"></i> Direct download via Google Drive. You may need to enable "Install from Unknown Sources" on your device.</p>
+        </div>
+      </div>
+
+      <div class="app-features">
+        <div class="app-feature reveal"><i class="fas fa-bolt"></i><span>Fast &amp; Lightweight</span></div>
+        <div class="app-feature reveal"><i class="fas fa-bell"></i><span>Class Reminders</span></div>
+        <div class="app-feature reveal"><i class="fas fa-book"></i><span>Offline Resources</span></div>
+        <div class="app-feature reveal"><i class="fab fa-whatsapp"></i><span>Quick WhatsApp Access</span></div>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="section">
+      <div class="sec-label">Advantages</div>
+      <h2 class="sec-h2">Why SkillNest</h2>
+      <div class="why-grid">
+        <div class="card why-card reveal"><div class="why-icon">📊</div><h3>Progress Analytics</h3><p>Personalised dashboards &amp; weak-area detection through the student portal.</p></div>
+        <div class="card why-card reveal"><div class="why-icon">🎓</div><h3>Examiner-Led Teaching</h3><p>Ms. Madhavi marks actual O/L &amp; A/L papers — she knows exactly what examiners want.</p></div>
+        <div class="card why-card reveal"><div class="why-icon">💻</div><h3>Hybrid Access</h3><p>Physical classes in Badulla plus digital resources accessible from anywhere.</p></div>
+        <div class="card why-card reveal"><div class="why-icon">📝</div><h3>Exam Simulation</h3><p>Monthly mock tests with examiner-style corrections and detailed feedback.</p></div>
+      </div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section class="section reg-section">
+      <div class="sec-label">Get Started</div>
+      <h2 class="sec-h2">Register via WhatsApp</h2>
+      <p class="sec-sub">Fill in your details — Ms. Madhavi will reach you directly.</p>
+      <form class="reg-form" id="whatsappRegForm" novalidate>
+        <div class="field-group">
+          <input type="text"  id="regName"     placeholder="Your Full Name"          required class="field-input">
+          <input type="tel"   id="regWhatsapp" placeholder="WhatsApp (+9476XXXXXXX)" required class="field-input">
+          <select id="regGrade" required class="field-input">
+            <option value="" disabled selected>Select Course</option>
+            <option value="Grade 1-5">Grade 1–5 (Beginner)</option>
+            <option value="Grade 6-9">Grade 6–9 (Foundation)</option>
+            <option value="O/L">O/L English</option>
+            <option value="A/L">A/L General English</option>
+            <option value="Spoken English">Spoken English</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary btn-wa-sub">
+          <i class="fab fa-whatsapp"></i> Send Registration
+        </button>
+        <p id="regStatus" class="reg-status"></p>
+      </form>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-band card reveal">
+      <div class="cta-text">
+        <h3>Join Our Learning Community</h3>
+        <p>Daily tips, class updates &amp; direct access to Ms. Madhavi</p>
+      </div>
+      <a href="https://wa.me/94767899845?text=Hello%20Teacher!%20I%20want%20to%20join%20the%20community"
+        class="btn-wa" target="_blank" rel="noopener">
+        <i class="fab fa-whatsapp fa-lg"></i> Join on WhatsApp
+      </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer card">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="image/icon.png" alt="" onerror="this.style.display='none'"> SkillNest
+        </div>
+        <p>Empowering English learners across Badulla since 2018. Guided by a qualified examiner, grounded in results.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="#" id="footerTeacher">Teacher Profile</a>
+        <a href="#" id="footerResources">Study Resources</a>
+        <a href="#" id="footerApp">Get the App</a>
+        <a href="files.html">Past Papers</a>
+        <a href="My English student.html">Student Portal</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p><i class="fas fa-phone"></i>+94 76 789 9845</p>
+        <p><i class="fas fa-envelope"></i>madhaviupeksha17@gmail.com</p>
+        <p><i class="fas fa-map-pin"></i>Salusala, Badulla, Sri Lanka</p>
+        <p><i class="fas fa-clock"></i>Sat &amp; Sun · 8AM–12PM</p>
+      </div>
+      <div class="footer-bottom">
+        © 2026 SkillNest English — Designed by <strong>Thuli | UMR</strong>
+      </div>
+    </footer>
+
+  </div><!-- /.wrap -->
+</div><!-- /#app -->
+
+<!-- TIMETABLE MODAL -->
+<div class="modal-bg" id="timetableModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeTimetable()"><i class="fas fa-xmark"></i></button>
+    <h3 class="modal-title"><i class="fas fa-calendar-days"></i> Class Timetable</h3>
+    <div class="tt-row"><span>Saturday</span><strong>8:00 AM – 12:00 PM</strong></div>
+    <div class="tt-row"><span>Sunday</span><strong>8:00 AM – 12:00 PM</strong></div>
+    <div class="tt-row"><span>Location</span><strong>Salusala, Badulla</strong></div>
+    <div class="tt-sub">
+      <p class="tt-sub-title">Grade-wise Breakdown</p>
+      <div class="tt-row"><span>📘 Grade 1–5 / 6–9</span><strong>8:00–10:00 AM</strong></div>
+      <div class="tt-row"><span>🎯 O/L English</span><strong>10:00 AM–12:00 PM</strong></div>
+      <div class="tt-row"><span>📕 A/L English</span><strong>8:00 AM–12:00 PM</strong></div>
+      <div class="tt-row"><span>🗣️ Spoken English</span><strong>Weekend (Flexible)</strong></div>
+    </div>
+    <button class="btn-primary" onclick="closeTimetable()" style="width:100%;justify-content:center;margin-top:6px;">Close</button>
+  </div>
+</div>
+
+<!-- SECRET ADMIN MODAL -->
+<div class="modal-bg" id="secretModal">
+  <div class="modal-card secret-card">
+    <div class="secret-icon"><i class="fas fa-fingerprint"></i></div>
+    <h3>Admin Access</h3>
+    <p class="secret-sub">Authorized personnel only</p>
+    <input type="password" id="secretPass" placeholder="Enter passkey…" class="field-input secret-input">
+    <button onclick="verifySecret()" class="btn-primary" style="width:100%;justify-content:center;">
+      <i class="fas fa-unlock"></i> Verify
+    </button>
+    <button onclick="closeSecret()" class="btn-cancel">Cancel</button>
+    <p id="secretMsg" class="secret-msg"></p>
+  </div>
+</div>
+
+<!-- FAB WhatsApp -->
+<div class="fab-wa" id="floatWa"><i class="fab fa-whatsapp"></i></div>
+
+<script src="js/three-scene.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
