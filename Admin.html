@@ -455,6 +455,7 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
   transition:all 0.2s;
 }
 .grade-chip:hover{background:rgba(99,102,241,0.25);border-color:var(--accent);}
+.grade-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 
 .month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0;}
 .month-opt{
@@ -959,7 +960,7 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
     <div class="logo-area">
-      <div class="logo-icon"><i class="fas fa-brain" style="color:#fff;font-size:1rem;"></i></div>
+      <div class="logo-icon"><img src="img/skillnest.png" alt="SkillNest Logo" class="icon-image" width="35" height="35"></div>
       <span class="logo-text">SkillNest</span>
       <!-- Mobile close button -->
       <button id="sidebarCloseBtn" onclick="closeSidebar()" style="margin-left:auto;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:0.9rem;display:none;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
@@ -979,6 +980,7 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
       <div class="sidebar-section">System</div>
       <div class="sidebar-link" data-nav="reports"><i class="fas fa-database"></i><span class="sl-text">Reports</span></div>
       <div class="sidebar-link" data-nav="announce"><i class="fab fa-whatsapp"></i><span class="sl-text">WhatsApp</span></div>
+      <div class="sidebar-link" data-nav="sms"><i class="fas fa-sms"></i><span class="sl-text">SMS</span></div>
       <div class="sidebar-link" data-nav="settings"><i class="fas fa-cog"></i><span class="sl-text">Settings</span></div>
     </div>
     <div class="sync-row">
@@ -1017,7 +1019,7 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
           <div class="login-brand">
             <div class="lb-top">
               <div class="lb-logo">
-                <div class="lb-logo-icon"><i class="fas fa-brain" style="color:#fff;"></i></div>
+                <div class="lb-logo-icon"><img src="img/skillnest.png" alt="SkillNest Logo" class="icon-image" width="50" height="50"></div>
                 <span class="lb-brand-name">SkillNest</span>
               </div>
               <div class="lb-headline">Admin<br><span>Control Panel</span></div>
@@ -1180,6 +1182,13 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
             <div class="stat-change neg" id="feeDefaulterAmount">2+ months due</div>
             <div style="font-size:0.55rem;color:var(--text3);margin-top:4px;"><i class="fas fa-hand-pointer"></i> Tap for details</div>
           </div>
+          <!-- NEW (v10): Paper/Spoken students total -->
+          <div class="stat-card s2" id="tempStudentCard" style="cursor:pointer;" title="Click to manage" onclick="showTempStudentsUI()">
+            <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+            <div class="stat-val" id="totalTempStudents">0</div>
+            <div class="stat-label">Paper/Spoken Total</div>
+            <div class="stat-change">O/L + A/L + Spoken</div>
+          </div>
         </div>
 
         <!-- PENDING ALERT -->
@@ -1218,6 +1227,15 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
               <div class="action-btn" data-section="datafilter"><i class="fas fa-database"></i>Data Viewer</div>
               <div class="action-btn" data-section="promote"><i class="fas fa-arrow-up"></i>Promote</div>
               <div class="action-btn" data-section="whatsapp"><i class="fab fa-whatsapp"></i>WhatsApp</div>
+              <div class="action-btn" data-section="sms" style="border-color:rgba(8,145,178,0.5);"><i class="fas fa-sms"></i>SMS</div>
+              <!-- NEW FEE MANAGEMENT BUTTONS -->
+              <div class="action-btn" data-section="feemgmt" style="border-color:rgba(99,102,241,0.5);"><i class="fas fa-tags"></i>Fee Config</div>
+              <div class="action-btn" data-section="freecard" style="border-color:rgba(16,185,129,0.5);"><i class="fas fa-gift"></i>Free Card</div>
+              <div class="action-btn" data-section="feestatus" style="border-color:rgba(245,158,11,0.5);"><i class="fas fa-user-tag"></i>Fee Status</div>
+              <div class="action-btn" data-section="septauto" style="border-color:rgba(34,211,238,0.5);"><i class="fas fa-robot"></i>Sept Auto</div>
+              <div class="action-btn" data-section="gradefee" style="border-color:rgba(16,185,129,0.5);"><i class="fas fa-money-bill-wave"></i>Grade Fees</div>
+              <div class="action-btn" data-section="tempstudents" style="border-color:rgba(236,72,153,0.5);"><i class="fas fa-user-graduate"></i>Paper/Spoken</div>
+              <div class="action-btn" data-section="tempfees" style="border-color:rgba(236,72,153,0.5);"><i class="fas fa-tag"></i>Paper/Spoken Fees</div>
             </div>
           </div>
 
@@ -1371,8 +1389,12 @@ setInterval(()=>{
      MAIN APP SCRIPT
 ══════════════════════════════════════════════════════════════ -->
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzpSB5XcfXjwnOUgmJ-RyEBkS5S-j5WLsg4PMfmNU3aHuFvjLF-lciwe5b5zGTcElsq/exec";
-const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycby2xVAurk1Z3nHkAg1U3iNqDmD9ZI-aa6RNZ_Kq5Aw8DDEpf8ekzQXzuLpgGfZgHAIiTw/exec";
+// NOTE: 'var' (not const/let) here on purpose — it attaches these to `window`,
+// guaranteeing they're visible from every other <script> block on the page,
+// no matter what order things load in or how the file is opened.
+var months=window.months||["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var TEMP_GRADES=window.TEMP_GRADES||['O/L Paper Class','A/L Paper Class','Spoken English'];
 let attendanceChart,paymentChart,kpiDonutChart;
 
 function showLoader(s){document.getElementById('loadingOverlay').classList.toggle('on',s);}
@@ -1380,9 +1402,12 @@ function showToast(msg,isError){
   let t=document.createElement('div');t.className='toast-msg'+(isError?' err':'');t.innerHTML=msg;
   document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
+// FIXED: This function previously added +1 day to every date, causing the
+// Google Sheets date (e.g. 2008-09-05) to display as 2008-09-06 everywhere.
+// Now it just returns the date as-is — exact match to the Sheet.
 function addOneDay(dateStr){
-  if(!dateStr)return'';let clean=String(dateStr).split('T')[0];
-  if(clean.match(/^\d{4}-\d{2}-\d{2}$/)){let parts=clean.split('-');let date=new Date(Date.UTC(parts[0],parts[1]-1,parts[2]));date.setUTCDate(date.getUTCDate()+1);return`${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}`;}return clean;
+  if(!dateStr)return'';
+  return String(dateStr).split('T')[0].substring(0,10);
 }
 function processDataDates(data){
   if(!data)return data;if(Array.isArray(data))return data.map(i=>processDataDates(i));
@@ -1412,7 +1437,7 @@ async function showRegisterModal(){
       <div class="form-group"><label>Student ID</label><input name="id" value="${nextId}" readonly></div>
       <div class="form-group"><label>Email</label><input name="email" type="email" required></div>
       <div class="form-group"><label>Full Name</label><input name="name" required></div>
-      <div class="form-group"><label>Grade</label><select name="grade">${Array.from({length:13},(_,i)=>`<option value="${i+1}">Grade ${i+1}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Grade</label><select name="grade" id="regGradeSel">${Array.from({length:13},(_,i)=>`<option value="${i+1}">Grade ${i+1}</option>`).join('')}<option value="O/L Paper Class">O/L Paper Class</option><option value="A/L Paper Class">A/L Paper Class</option><option value="Spoken English">Spoken English</option></select></div>
       <div class="grid2">
         <div class="form-group"><label>Phone</label><input name="phone" required></div>
         <div class="form-group"><label>Gender</label><select name="gender"><option>Male</option><option>Female</option></select></div>
@@ -1420,9 +1445,29 @@ async function showRegisterModal(){
       <div class="form-group"><label>Birth Date</label><input name="birth" type="date"></div>
       <div class="form-group"><label>Address</label><input name="address"></div>
       <div class="form-group"><label>Parent Info</label><input name="parentInf"></div>
+      <div id="regExtraFields" style="display:none;">
+        <div class="grid2">
+          <div class="form-group"><label>NIC</label><input name="nic"></div>
+          <div class="form-group"><label>Exam Index Number</label><input name="examIndexNumber"></div>
+        </div>
+        <div class="form-group"><label>Exam Year</label><input name="examYear" placeholder="2026"></div>
+      </div>
       <div class="flex-row"><button type="submit" class="btn-main">Register</button><button type="button" class="btn-main btn-danger" onclick="closeModal()">Cancel</button></div>
     </form>`));
-  document.getElementById('regForm').onsubmit=async function(e){e.preventDefault();let fd=new FormData(e.target);let data={};fd.forEach((v,k)=>data[k]=v);showLoader(true);let r=await apiCall('registerStudent','POST',data);showLoader(false);if(r.success){showToast('Student Registered!');alert(`Student Registered!\nID: ${r.id}\nPassword: ${r.password}`);closeModal();await loadDashboardStats();}else showToast(r.message,true);};
+  const toggleRegExtra=()=>{const g=document.getElementById('regGradeSel').value;const isSpecial=['11','12','13','O/L Paper Class','A/L Paper Class','Spoken English'].includes(g);document.getElementById('regExtraFields').style.display=isSpecial?'block':'none';};
+  document.getElementById('regGradeSel').addEventListener('change',toggleRegExtra);
+  toggleRegExtra();
+  document.getElementById('regForm').onsubmit=async function(e){e.preventDefault();let fd=new FormData(e.target);let data={};fd.forEach((v,k)=>data[k]=v);showLoader(true);
+    // NEW: O/L Paper Class / A/L Paper Class / Spoken English go through the pending → approval flow
+    // so they land in Temporary_Registration with a T-prefixed ID, same as student-submitted requests.
+    const isTemp=['O/L Paper Class','A/L Paper Class','Spoken English'].includes(data.grade);
+    let r;
+    if(isTemp){
+      r=await apiCall('pendingRegistration','POST',data);
+      if(r.success){showLoader(true);const ap=await apiCall('approveRegistration','POST',{id:r.id});showLoader(false);if(ap.success){showToast('Temporary Student Registered!');alert(`Temporary Student Registered!\nID: ${ap.permanentId}\nPassword: ${r.password}`);closeModal();await loadDashboardStats();return;}}
+      showLoader(false);showToast(r.message||'Failed',true);return;
+    }
+    r=await apiCall('registerStudent','POST',data);showLoader(false);if(r.success){showToast('Student Registered!');alert(`Student Registered!\nID: ${r.id}\nPassword: ${r.password}`);closeModal();await loadDashboardStats();}else showToast(r.message,true);};
 }
 
 function showUpdateModal(){
@@ -1436,6 +1481,7 @@ function showUpdateModal(){
     showLoader(true);let r=await apiCall('getStudentData','GET',{id});showLoader(false);
     if(r.success){
       let s=r.data;let bd=s.birth?addOneDay(s.birth):'';
+      const showExtra=['11','12','13'].includes(String(s.grade));
       document.getElementById('updateFormContainer').innerHTML=`<form id="updateForm">
         <input name="id" value="${s.id||''}" readonly style="display:none;">
         <div class="grid2">
@@ -1453,9 +1499,24 @@ function showUpdateModal(){
         <div class="form-group"><label>Birth Date</label><input name="birth" type="date" value="${bd}"></div>
         <div class="form-group"><label>Address</label><input name="address" value="${s.address||''}"></div>
         <div class="form-group"><label>Parent Info</label><input name="parentInf" value="${s.parentInf||''}"></div>
+        <div class="grid2">
+          <div class="form-group"><label>NIC</label><input name="nic" value="${s.nic||''}"></div>
+          <div class="form-group"><label>Exam Index Number</label><input name="examIndexNumber" value="${s.examIndexNumber||''}"></div>
+        </div>
+        <div class="form-group"><label>Exam Year</label><input name="examYear" value="${s.examYear||''}"></div>
+        <div class="form-group" ${showExtra?'':'style="display:none;"'}>
+          <label>Additional Buy (Paper Class add-on)</label>
+          <select name="additionalBuy">
+            <option value="" ${!s.additionalBuy?'selected':''}>None</option>
+            <option value="O/L Paper Class" ${s.additionalBuy==='O/L Paper Class'?'selected':''}>O/L Paper Class</option>
+            <option value="A/L Paper Class" ${s.additionalBuy==='A/L Paper Class'?'selected':''}>A/L Paper Class</option>
+          </select>
+        </div>
         <div class="flex-row"><button type="submit" class="btn-main">Update</button><button type="button" id="deleteBtn" class="btn-main btn-danger">Delete</button></div>
       </form>`;
-      document.getElementById('updateForm').onsubmit=async function(ev){ev.preventDefault();let fd=new FormData(ev.target);let data={};fd.forEach((v,k)=>data[k]=v);showLoader(true);await apiCall('updateStudent','POST',data);showLoader(false);showToast('Updated!');closeModal();await loadDashboardStats();};
+      document.getElementById('updateForm').onsubmit=async function(ev){ev.preventDefault();let fd=new FormData(ev.target);let data={};fd.forEach((v,k)=>data[k]=v);showLoader(true);await apiCall('updateStudent','POST',data);
+        if(data.additionalBuy!==undefined) await apiCall('addAdditionalBuy','POST',{id:data.id,addon:data.additionalBuy});
+        showLoader(false);showToast('Updated!');closeModal();await loadDashboardStats();};
       document.getElementById('deleteBtn').onclick=async function(){if(confirm('Delete this student?')){showLoader(true);await apiCall('deleteStudent','POST',{id});showLoader(false);showToast('Deleted');closeModal();await loadDashboardStats();}};
     }else showToast('Student not found',true);
   };
@@ -1479,13 +1540,16 @@ async function showAttendanceUI(grade){
 }
 
 function showExamGradeSelect(){
-  openModal(mbox('<i class="fas fa-chart-line"></i> Exam Marks',`<div class="grade-chips">${[1,2,3,4,5,6,7,8,9,10,11,12,13].map(g=>`<div class="grade-chip" data-grade="${g}">Grade ${g}</div>`).join('')}</div><div id="examArea"></div>`));
-  document.querySelectorAll('.grade-chip').forEach(c=>c.addEventListener('click',()=>showExamUI(c.dataset.grade)));
+  const tempChips=TEMP_GRADES.map(g=>`<div class="grade-chip" data-grade="${g}" data-temp="1" style="border-color:rgba(236,72,153,0.5);">${g}</div>`).join('');
+  openModal(mbox('<i class="fas fa-chart-line"></i> Exam Marks',`<div class="grade-chips">${[1,2,3,4,5,6,7,8,9,10,11,12,13].map(g=>`<div class="grade-chip" data-grade="${g}">Grade ${g}</div>`).join('')}${tempChips}</div><div id="examArea"></div>`));
+  document.querySelectorAll('.grade-chip').forEach(c=>c.addEventListener('click',()=>showExamUI(c.dataset.grade,c.dataset.temp==='1')));
 }
-async function showExamUI(grade){
-  let students=await apiCall('getAllStudentsByGrade','GET',{grade});if(!students.success||!students.data.length){document.getElementById('examArea').innerHTML='<p style="color:var(--text3)">No students</p>';return;}
+async function showExamUI(grade,isTemp){
+  let students=isTemp?await apiCall('getAllTempStudents','GET'):await apiCall('getAllStudentsByGrade','GET',{grade});
+  let list=isTemp?(students.success?students.data.filter(s=>s.grade===grade):[]):(students.success?students.data:[]);
+  if(!list.length){document.getElementById('examArea').innerHTML='<p style="color:var(--text3)">No students</p>';return;}
   let today=new Date().toISOString().slice(0,10);
-  let rows=students.data.map(s=>`<tr><td>${s.id}</td><td>${s.name}</td><td><input class="mark-input" data-id="${s.id}" placeholder="0-100" style="width:70px;"></td></tr>`).join('');
+  let rows=list.map(s=>`<tr><td>${s.id}</td><td>${s.name}</td><td><input class="mark-input" data-id="${s.id}" placeholder="0-100" style="width:70px;"></td></tr>`).join('');
   document.getElementById('examArea').innerHTML=`<div class="form-group"><label>Date</label><input id="examDate" value="${today}"></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Mark</th></tr></thead><tbody>${rows}</tbody></table></div><button class="btn-main" id="saveExamBtn" style="margin-top:10px;">Save Marks</button>`;
   document.getElementById('saveExamBtn').onclick=async function(){let date=document.getElementById('examDate').value;let marks=[];document.querySelectorAll('.mark-input').forEach(inp=>{if(inp.value)marks.push({id:inp.dataset.id,mark:parseInt(inp.value)});});if(!marks.length){showToast('No marks entered',true);return;}showLoader(true);let r=await apiCall('saveExamMarks','POST',{grade,date,marks});showLoader(false);if(r.success){showToast('Marks saved!');closeModal();}else showToast(r.message,true);};
 }
@@ -1502,26 +1566,167 @@ async function showSkillUI(grade){
 }
 
 function showPaymentGradeSelect(){
-  openModal(mbox('<i class="fas fa-coins"></i> Payments',`<div class="grade-chips">${[1,2,3,4,5,6,7,8,9,10,11,12,13].map(g=>`<div class="grade-chip" data-grade="${g}">Grade ${g}</div>`).join('')}</div><div id="paymentArea"></div>`));
-  document.querySelectorAll('.grade-chip').forEach(c=>c.addEventListener('click',()=>showPaymentUI(c.dataset.grade)));
+  const tempChips=TEMP_GRADES.map(g=>`<div class="grade-chip" data-grade="${g}" data-temp="1" style="border-color:rgba(236,72,153,0.5);">${g}</div>`).join('');
+  openModal(mbox('<i class="fas fa-coins"></i> Payments',`<div class="grade-chips">${[1,2,3,4,5,6,7,8,9,10,11,12,13].map(g=>`<div class="grade-chip" data-grade="${g}">Grade ${g}</div>`).join('')}${tempChips}</div><div id="paymentArea"></div>`));
+  document.querySelectorAll('.grade-chip').forEach(c=>c.addEventListener('click',()=>c.dataset.temp==='1'?showTempPaymentGradeUI(c.dataset.grade):showPaymentUI(c.dataset.grade)));
 }
-async function showPaymentUI(grade){
-  let students=await apiCall('getAllStudentsByGrade','GET',{grade});if(!students.success||!students.data.length){document.getElementById('paymentArea').innerHTML='<p style="color:var(--text3)">No students</p>';return;}
-  let rows=students.data.map(s=>`<tr><td>${s.id}</td><td>${s.name}</td><td><button class="btn-main btn-sm mark-pay-btn" data-id="${s.id}">Pay</button></td></tr>`).join('');
+
+// ── NEW (v10): Payment marking for Temporary Students (O/L/A/L Paper Class, Spoken English) ──
+async function showTempPaymentGradeUI(grade){
+  const curYear=new Date().getFullYear();
+  showLoader(true);const all=await apiCall('getAllTempStudents','GET');showLoader(false);
+  const list=all.success?all.data.filter(s=>s.grade===grade):[];
+  if(!list.length){document.getElementById('paymentArea').innerHTML='<p style="color:var(--text3)">No students found</p>';return;}
+  let rows=list.map(s=>`<tr><td style="font-weight:600;color:#ec4899;">${s.id}</td><td>${s.name}</td><td><button class="btn-main btn-sm mark-temp-pay-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-coins"></i> Pay</button></td></tr>`).join('');
   document.getElementById('paymentArea').innerHTML=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  document.querySelectorAll('.mark-pay-btn').forEach(btn=>btn.addEventListener('click',async function(){
-    let id=this.dataset.id;let payments=await apiCall('getPayments','GET',{id});let paidMonths=payments.success?payments.data.map(p=>p.month):[];let year=new Date().getFullYear();
-    openModal(mbox(`<i class="fas fa-coins"></i> Payment for ${id}`,`<p style="color:var(--text2);font-size:0.8rem;margin-bottom:10px;">Select month for ${year}</p><div class="month-grid">${months.map(m=>`<div class="month-opt ${paidMonths.includes(m)?'paid':''}" data-month="${m}">${m}</div>`).join('')}</div><button class="btn-main" id="confirmPayBtn" style="margin-top:10px;">Confirm Payment</button>`));
-    let sel=null;document.querySelectorAll('.month-opt:not(.paid)').forEach(opt=>opt.addEventListener('click',function(){sel=this.dataset.month;document.querySelectorAll('.month-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected');}));
-    document.getElementById('confirmPayBtn').onclick=async function(){if(sel){showLoader(true);await apiCall('savePayment','POST',{id,month:sel,year});showLoader(false);showToast(`Payment recorded: ${sel}`);closeModal();await loadDashboardStats();}};
+  document.querySelectorAll('.mark-temp-pay-btn').forEach(btn=>btn.addEventListener('click',async function(){
+    const id=this.dataset.id,name=this.dataset.name;
+    showLoader(true);const status=await apiCall('getTempStudentPaymentStatus','GET',{id,year:curYear});showLoader(false);
+    const paidSet=new Set(status.paidMonths||[]);
+    const amount=status.feeAmount||0;
+    openModal(mbox(`<i class="fas fa-coins"></i> Payment — ${name}`,`
+      <div style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.3);border-radius:12px;padding:10px 14px;margin-bottom:14px;">
+        <span style="font-size:0.6rem;color:var(--text3);display:block;">MONTHLY FEE (${status.grade||''})</span>
+        <span style="font-size:1.1rem;font-weight:700;color:var(--amber);">${amount>0?'Rs.'+Number(amount).toLocaleString():'Rs.—'}</span>
+      </div>
+      <p style="color:var(--text2);font-size:0.78rem;margin-bottom:10px;">Select month to mark payment (greyed = paid / disabled):</p>
+      <div class="month-grid">
+        ${months.map(m=>{const disabled=paidSet.has(m);return `<div class="month-opt${disabled?' paid':''}" data-month="${m}" style="${disabled?'opacity:0.45;cursor:not-allowed;':'cursor:pointer;'}">${m}${disabled?'<br><small style="font-size:0.48rem;color:var(--accent2);">✓</small>':''}</div>`;}).join('')}
+      </div>
+      <div id="tPaySelInfo" style="margin-top:8px;min-height:20px;font-size:0.75rem;color:var(--text2);"></div>
+      <div class="flex-row" style="margin-top:10px;">
+        <button class="btn-main" id="confirmTPayBtn" style="flex:1;"><i class="fas fa-check-circle"></i> Confirm Payment</button>
+        <button class="btn-main" id="disableMonthBtn" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);"><i class="fas fa-ban"></i> Disable Month</button>
+      </div>
+    `));
+    let sel=null;
+    document.querySelectorAll('.month-opt:not(.paid)').forEach(opt=>opt.addEventListener('click',function(){
+      sel=this.dataset.month;
+      document.querySelectorAll('.month-opt').forEach(o=>o.classList.remove('selected'));
+      this.classList.add('selected');
+      document.getElementById('tPaySelInfo').innerHTML=`Selected: <strong>${sel} ${curYear}</strong> — <strong style="color:var(--amber);">Rs.${Number(amount).toLocaleString()}</strong>`;
+    }));
+    document.getElementById('confirmTPayBtn').onclick=async function(){
+      if(!sel){showToast('Please select a month',true);return;}
+      showLoader(true);const r=await apiCall('saveTempPayment','POST',{id,month:sel,year:curYear});showLoader(false);
+      if(r.success){showToast(`✅ ${sel} ${curYear} — Rs.${Number(r.amount).toLocaleString()}`);closeModal();}
+      else showToast(r.message||'Failed',true);
+    };
+    document.getElementById('disableMonthBtn').onclick=async function(){
+      if(!sel){showToast('Please select a month first',true);return;}
+      if(!confirm(`Disable payment requirement for ${sel} ${curYear}?`))return;
+      showLoader(true);const r=await apiCall('disableTempPaymentMonth','POST',{id,month:sel,year:curYear});showLoader(false);
+      if(r.success){showToast(r.message);closeModal();} else showToast(r.message||'Failed',true);
+    };
   }));
 }
 
+async function showPaymentUI(grade){
+  // Get current year
+  const curYear = new Date().getFullYear();
+  
+  let students=await apiCall('getAllStudentsByGrade','GET',{grade});
+  if(!students.success||!students.data.length){
+    document.getElementById('paymentArea').innerHTML='<p style="color:var(--text3)">No students found</p>';
+    return;
+  }
+  
+  let rows=students.data.map(s=>`<tr><td style="font-weight:600;color:var(--accent2);">${s.id}</td><td>${s.name}</td><td><button class="btn-main btn-sm mark-pay-btn" data-id="${s.id}" data-name="${s.name}" data-grade="${grade}"><i class="fas fa-coins"></i> Pay</button></td></tr>`).join('');
+  
+  document.getElementById('paymentArea').innerHTML=`
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div style="font-size:0.7rem;color:var(--text3);margin-top:8px;text-align:center;">Click "Pay" to mark monthly payment</div>
+  `;
+  
+  document.querySelectorAll('.mark-pay-btn').forEach(btn=>btn.addEventListener('click',async function(){
+    const id=this.dataset.id; 
+    const name=this.dataset.name;
+    const studentGrade = this.dataset.grade || grade;
+    
+    showLoader(true);
+    // Fetch everything needed for the preview in parallel (was 4 sequential round-trips)
+    const [statusRes, gradeFeeRes, studentInfo] = await Promise.all([
+      apiCall('getStudentPaymentStatusV2','GET',{id, year:curYear}),
+      apiCall('getFeeByGrade','GET',{grade: studentGrade}),
+      apiCall('getStudentData','GET',{id})
+    ]);
+    const additionalBuy = studentInfo.success ? (studentInfo.data.additionalBuy||'') : '';
+    let addonFee = 0;
+    if(additionalBuy){
+      const addonFeeRes = await apiCall('getTempCategoryFees','GET');
+      if(addonFeeRes.success){
+        const match = addonFeeRes.data.find(c=>c.category===additionalBuy);
+        if(match) addonFee = match.monthly_fee;
+      }
+    }
+    showLoader(false);
+
+    const paidSet   = new Set(statusRes.paidMonths||[]);
+    const freeSet   = new Set(statusRes.freeMonths||[]);
+    const fcPeriods = statusRes.fcPeriods||[];
+    const amount    = (gradeFeeRes.fee > 0 ? gradeFeeRes.fee : (statusRes.feeAmount||0)) + addonFee;
+    
+    // Check if free card is active
+    const todayISO = new Date().toISOString().slice(0,10);
+    const isFreeNow = fcPeriods.some(fc=>fc.start&&todayISO>=fc.start&&(!fc.end||todayISO<=fc.end));
+    const category = (gradeFeeRes.category || statusRes.category || `Grade ${studentGrade}`) + (additionalBuy?` + ${additionalBuy}`:'');
+    
+    openModal(mbox(`<i class="fas fa-coins"></i> Payment — ${name}`,`
+      <div style="background:${isFreeNow?'rgba(16,185,129,0.1)':'rgba(99,102,241,0.08)'};border:1px solid ${isFreeNow?'rgba(16,185,129,0.3)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+        <div><span style="font-size:0.6rem;color:var(--text3);display:block;">MONTHLY FEE</span><span style="font-size:1.1rem;font-weight:700;color:${isFreeNow?'var(--green)':'var(--amber)'};">${isFreeNow?'🎁 FREE CARD':amount>0?'Rs.'+Number(amount).toLocaleString():'Rs.—'}</span></div>
+        ${category?`<div><span style="font-size:0.6rem;color:var(--text3);display:block;">CATEGORY</span><span style="font-size:0.78rem;font-weight:600;color:var(--text);">${category}</span></div>`:''}
+        <div><span style="font-size:0.6rem;color:var(--text3);display:block;">STATUS</span><span style="background:${isFreeNow?'rgba(16,185,129,0.15)':'rgba(99,102,241,0.15)'};color:${isFreeNow?'var(--green)':'var(--accent2)'};padding:2px 10px;border-radius:8px;font-size:0.65rem;">${isFreeNow?'FREE':'ACTIVE'}</span></div>
+        <div style="margin-left:auto;font-size:0.65rem;color:var(--text3);">Year: ${curYear}</div>
+      </div>
+      <p style="color:var(--text2);font-size:0.78rem;margin-bottom:10px;">Select month to mark payment (greyed = paid / free card):</p>
+      <div class="month-grid">
+        ${months.map(m=>{
+          const isPaid  = paidSet.has(m);
+          const isFreeM = freeSet.has(m);
+          const disabled= isPaid||isFreeM;
+          const label   = isFreeM?'🎁 FREE':(isPaid?'✓ Paid':'');
+          const labelColor= isFreeM?'var(--green)':'var(--accent2)';
+          return `<div class="month-opt${disabled?' paid':''}" data-month="${m}"
+            style="${disabled?'opacity:0.45;cursor:not-allowed;':'cursor:pointer;'}"
+            ${disabled?`title="${isFreeM?'Free card active':'Already paid'}"`:''}
+          >${m}${label?`<br><small style="font-size:0.48rem;color:${labelColor};">${label}</small>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+      <div id="paySelInfo" style="margin-top:8px;min-height:20px;font-size:0.75rem;color:var(--text2);"></div>
+      <button class="btn-main" id="confirmPayBtn" style="margin-top:10px;width:100%;"><i class="fas fa-check-circle"></i> Confirm Payment</button>
+    `));
+    
+    let sel=null;
+    document.querySelectorAll('.month-opt:not(.paid)').forEach(opt=>opt.addEventListener('click',function(){
+      sel=this.dataset.month;
+      document.querySelectorAll('.month-opt').forEach(o=>o.classList.remove('selected'));
+      this.classList.add('selected');
+      const feeDisplay = isFreeNow ? 'FREE CARD' : 'Rs.'+Number(amount).toLocaleString();
+      document.getElementById('paySelInfo').innerHTML=`Selected: <strong>${sel} ${curYear}</strong> — <strong style="color:${isFreeNow?'var(--green)':'var(--amber)'};">${feeDisplay}</strong>`;
+    }));
+    
+    document.getElementById('confirmPayBtn').onclick=async function(){
+      if(!sel){showToast('Please select a month',true);return;}
+      this.disabled=true;this.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';
+      showLoader(true);
+      const r=await apiCall('savePaymentV2','POST',{id,month:sel,year:curYear});
+      showLoader(false);
+      if(r.success){
+        const payType = r.paymentType === 'FREE' ? '🎁 FREE CARD' : 'Rs.'+Number(r.amount).toLocaleString();
+        showToast(`✅ ${sel} ${curYear} — ${payType}`);
+        closeModal();
+        await loadDashboardStats();
+      }
+      else{showToast(r.message||'Failed',true);this.disabled=false;this.innerHTML='<i class="fas fa-check-circle"></i> Confirm Payment';}
+    };
+  }));
+}
 // ==================== DRIVE ASSIGNMENT SYSTEM ====================
 let asgEditId = null; // track edit mode
 
 function showAssignmentsUI() {
-  const gradeOpts = Array.from({length:13},(_,i)=>`<option value="${i+1}">Grade ${i+1}</option>`).join('');
+  const gradeOpts = Array.from({length:13},(_,i)=>`<option value="${i+1}">Grade ${i+1}</option>`).join('')+TEMP_GRADES.map(g=>`<option value="${g}">${g}</option>`).join('');
   openModal(`<div class="modal-box" style="max-width:900px;">
     <div class="modal-head">
       <h2><i class="fas fa-tasks"></i> Assignment Manager <span style="font-size:0.65rem;background:rgba(99,102,241,0.2);border:1px solid var(--border);padding:2px 8px;border-radius:10px;margin-left:8px;">Google Drive</span></h2>
@@ -2063,9 +2268,13 @@ async function promoteAllGrades(){if(confirm('Promote all students to next grade
 async function showPendingApprovals(){
   showLoader(true);let r=await apiCall('getPendingRegistrations','GET');showLoader(false);
   if(!r.success||!r.data.length){showToast('No pending approvals');return;}
-  let rows=r.data.map(p=>`<tr><td>${p.id}</td><td>${p.name}</td><td>Grade ${p.grade}</td><td>${p.phone}</td><td><div style="display:flex;gap:4px;"><button class="approve-btn btn-main btn-sm" data-id="${p.id}" style="background:rgba(16,185,129,0.2);color:var(--green);border:1px solid var(--green);">Approve</button><button class="reject-btn btn-main btn-sm" data-id="${p.id}" style="background:rgba(244,63,94,0.2);color:var(--red);border:1px solid var(--red);">Reject</button></div></td></tr>`).join('');
+  let rows=r.data.map(p=>{
+    const tempBadge=p.isTemp?`<span style="background:rgba(236,72,153,0.2);color:#ec4899;border:1px solid #ec4899;padding:1px 6px;border-radius:6px;font-size:0.58rem;margin-left:4px;">TEMP</span>`:'';
+    const extra=p.isTemp?`<div style="font-size:0.6rem;color:var(--text3);margin-top:3px;">NIC: ${p.nic||'-'} | Index: ${p.examIndexNumber||'-'} | Year: ${p.examYear||'-'}</div>`:(p.additionalBuy?`<div style="font-size:0.6rem;color:var(--text3);margin-top:3px;">+ ${p.additionalBuy}</div>`:'');
+    return `<tr><td>${p.id}</td><td>${p.name}${tempBadge}</td><td>${p.grade}${extra}</td><td>${p.phone}</td><td><div style="display:flex;gap:4px;"><button class="approve-btn btn-main btn-sm" data-id="${p.id}" style="background:rgba(16,185,129,0.2);color:var(--green);border:1px solid var(--green);">Approve</button><button class="reject-btn btn-main btn-sm" data-id="${p.id}" style="background:rgba(244,63,94,0.2);color:var(--red);border:1px solid var(--red);">Reject</button></div></td></tr>`;
+  }).join('');
   openModal(mbox('<i class="fas fa-check-circle"></i> Pending Approvals',`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th>Phone</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div>`));
-  document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async function(){let id=this.dataset.id;showLoader(true);await apiCall('approveRegistration','POST',{id});showLoader(false);showToast('Approved!');closeModal();await loadPendingCount();await loadDashboardStats();}));
+  document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async function(){let id=this.dataset.id;showLoader(true);const ap=await apiCall('approveRegistration','POST',{id});showLoader(false);showToast(ap.success?`Approved! ID: ${ap.permanentId}`:(ap.message||'Failed'),!ap.success);closeModal();await loadPendingCount();await loadDashboardStats();}));
   document.querySelectorAll('.reject-btn').forEach(btn=>btn.addEventListener('click',async function(){let id=this.dataset.id;showLoader(true);await apiCall('rejectRegistration','POST',{id});showLoader(false);showToast('Rejected');closeModal();await loadPendingCount();}));
 }
 
@@ -2082,15 +2291,83 @@ function dateToStr(d){
   return`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
 }
 
-async function loadDashboardStats(){
+// ─── MONTHLY INCOME — single source of truth ─────────────
+// Monthly Income is always attributed using the PaymentDate (falling back to the
+// Timestamp) of a payment record — i.e. the month/year the money was actually
+// collected. The 'Month' field on a payment is the FEE month it pays for and must
+// NEVER be used to decide which month's income a payment counts toward.
+// Every widget/chart/card that shows Monthly Income must call computeMonthlyIncome()
+// so the whole dashboard always agrees.
+function getIncomeMonthYear(p){
+  let d=parseSheetDate(p.paymentDate);
+  if(!d&&p.timestamp){
+    let ts=new Date(p.timestamp);
+    if(!isNaN(ts))d=new Date(Date.UTC(ts.getFullYear(),ts.getMonth(),ts.getDate()));
+  }
+  if(!d)return null;
+  return{m:d.getUTCMonth()+1,y:d.getUTCFullYear()};
+}
+function computeMonthlyIncome(payments,month,year){
+  let total=0,count=0;
+  (payments||[]).forEach(p=>{
+    const my=getIncomeMonthYear(p);
+    if(!my||my.m!==month||my.y!==year)return;
+    total+=Number(p.amount)||0; // Amount=0 (Free Card) simply contributes 0
+    count++;
+  });
+  return{total,count};
+}
+// PERF: computeMonthlyIncome() above re-scans the whole payments array for every
+// single month it's asked about. The dashboard needs 7 different months (current +
+// 6 for the chart) every load, which used to mean 7 full passes over payments.
+// computeMonthlyIncomeIndex() does ONE pass and groups totals by 'month_year', so
+// looking up any number of months afterwards is instant. computeMonthlyIncome()
+// itself is left untouched so anything else calling it directly keeps working.
+function computeMonthlyIncomeIndex(payments){
+  const idx=new Map();
+  (payments||[]).forEach(p=>{
+    const my=getIncomeMonthYear(p);
+    if(!my)return;
+    const k=my.m+'_'+my.y;
+    if(!idx.has(k))idx.set(k,{total:0,count:0});
+    const e=idx.get(k);
+    e.total+=Number(p.amount)||0;
+    e.count++;
+  });
+  return idx;
+}
+function lookupMonthlyIncome(idx,month,year){
+  return idx.get(month+'_'+year)||{total:0,count:0};
+}
+
+async function loadDashboardStats(silent){
   try{
-    showLoader(true);
+    if(!silent)showLoader(true);
     const monthNames=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     let today=new Date(),curM=today.getMonth()+1,curY=today.getFullYear();
     const cmn=monthNames[curM];
 
+    // ── Fetch students, payments & attendance IN PARALLEL ──
+    // These 3 used to be awaited one after another, which meant every dashboard
+    // load (and every 30s silent auto-refresh) paid the full network+server round
+    // trip 3 times in a row. Firing them together with Promise.all cuts that
+    // wait time down to whichever single call is slowest, instead of the sum
+    // of all three — this is the single biggest fix for the "taking forever
+    // to load Total Students / Due Payments" slowness.
+    let [students,payments,allAtt,tempStudents,tempPayments]=await Promise.all([
+      apiCall('getAllStudents','GET'),
+      apiCall('getAllPayments','GET'),
+      apiCall('getAttendanceData','GET'),
+      apiCall('getAllTempStudents','GET'),
+      apiCall('getAllTempPayments','GET')
+    ]);
+
+    // ── Paper/Spoken (Temp) students total ──
+    if(tempStudents.success){
+      document.getElementById('totalTempStudents').innerText=tempStudents.data.length;
+    }
+
     // ── Students ──
-    let students=await apiCall('getAllStudents','GET');
     let cnt=0;
     if(students.success){
       cnt=students.data.length;
@@ -2099,25 +2376,23 @@ async function loadDashboardStats(){
       renderStudentTable(students.data);
     }else{document.getElementById('totalStudents').innerText='0';}
 
-    // ── Payments ──
-    let payments=await apiCall('getAllPayments','GET');
-    let mTotal=0,mPay=[0,0,0,0,0,0];
-    if(payments.success&&payments.data){
-      payments.data.forEach(p=>{
-        // Use paymentDate field (ISO date from sheet) for monthly income
-        let pm=null,py=null;
-        if(p.paymentDate){
-          let d=parseSheetDate(p.paymentDate);
-          if(d){pm=d.getUTCMonth()+1;py=d.getUTCFullYear();}
-        }
-        // Fallback: use month/year fields
-        if(!pm&&p.month&&p.year){
-          pm=months.indexOf(p.month)+1;py=Number(p.year);
-        }
-        if(pm===curM&&py===curY)mTotal+=1000;
-        let mi=months.indexOf(p.month);
-        if(mi>=0&&mi<6)mPay[mi]+=1000;
-      });
+    // ── Payments / Monthly Income ──
+    // PERF: build the payment index + monthly-income index ONCE per load, then
+    // reuse them for every stat below (pending / fee defaulters / income chart)
+    // NEW (v10): Monthly Income now includes Temporary_Payment (Paper Class / Spoken
+    // English) amounts too — combined into the same array before indexing.
+    const combinedPayments=(payments.success?payments.data||[]:[]).concat(tempPayments.success?tempPayments.data||[]:[]);
+    let paymentIndex=payments.success?buildPaymentIndex(payments.data||[]):new Map();
+    let incomeIndex=computeMonthlyIncomeIndex(combinedPayments);
+    let mTotal=0,mPay=[0,0,0,0,0,0],chartMonths=[];
+    // Trailing 6-month window ending at the current month, for the income chart
+    for(let k=5;k>=0;k--){
+      let d=new Date(curY,curM-1-k,1);
+      chartMonths.push({m:d.getMonth()+1,y:d.getFullYear(),label:monthNames[d.getMonth()+1]});
+    }
+    if(combinedPayments.length){
+      mTotal=lookupMonthlyIncome(incomeIndex,curM,curY).total;
+      chartMonths.forEach((cm,idx)=>{ mPay[idx]=lookupMonthlyIncome(incomeIndex,cm.m,cm.y).total; });
     }
     document.getElementById('monthlyIncome').innerText='Rs.'+mTotal.toLocaleString();
     document.getElementById('heroMonthlyIncome').innerText='Rs.'+mTotal.toLocaleString();
@@ -2126,12 +2401,14 @@ async function loadDashboardStats(){
     }
 
     // ── Pending payments (current month) ──
+    // PERF: build a Set of student IDs who've paid the current month ONCE
+    // (O(payments)), then just check membership per student (O(1) each)
+    // instead of scanning the whole payments array per student.
     let pending=0;
     if(students.success&&payments.success){
-      students.data.forEach(s=>{
-        let hp=payments.data?payments.data.some(p=>p.id===s.id&&p.month===cmn&&Number(p.year)===curY):false;
-        if(!hp)pending++;
-      });
+      let paidThisMonth=new Set();
+      (payments.data||[]).forEach(p=>{ if(p.month===cmn&&Number(p.year)===curY)paidThisMonth.add(p.id); });
+      students.data.forEach(s=>{ if(!paidThisMonth.has(s.id))pending++; });
     }
     document.getElementById('pendingPayments').innerText=pending;
 
@@ -2139,7 +2416,7 @@ async function loadDashboardStats(){
     let feeDefaultCount=0;
     if(students.success&&payments.success){
       students.data.forEach(s=>{
-        let dueCount=getDueMonths(s.id,payments.data||[]).length;
+        let dueCount=getDueMonths(s.id,payments.data||[],paymentIndex).length;
         if(dueCount>=2)feeDefaultCount++;
       });
     }
@@ -2149,9 +2426,6 @@ async function loadDashboardStats(){
     // ── TODAY'S ATTENDANCE (real date from sheet) ──
     // Build today string in LOCAL timezone to match what was saved
     let todayLocal=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
-    // Fetch all attendance data to find the MOST RECENT class day
-    let allAtt=await apiCall('getAttendanceData','GET');
     let presC=0,totC=0,lastClassDate='';
 
     if(allAtt.success&&allAtt.data&&allAtt.data.length>0){
@@ -2257,12 +2531,34 @@ async function loadDashboardStats(){
     if(paymentChart)paymentChart.destroy();
     paymentChart=new Chart(document.getElementById('paymentChart'),{
       type:'bar',
-      data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Rs.',data:mPay,backgroundColor:'rgba(99,102,241,0.5)',borderColor:'#6366f1',borderWidth:1,borderRadius:6}]},
+      data:{labels:chartMonths.map(c=>c.label),datasets:[{label:'Rs.',data:mPay,backgroundColor:'rgba(99,102,241,0.5)',borderColor:'#6366f1',borderWidth:1,borderRadius:6}]},
       options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,0.08)'}},y:{grid:{color:'rgba(99,102,241,0.08)'},ticks:{callback:v=>'Rs.'+(v/1000)+'K'}}}}
     });
 
-    showLoader(false);
-  }catch(e){console.error('Dashboard error:',e);showLoader(false);}
+    if(!silent)showLoader(false);
+  }catch(e){console.error('Dashboard error:',e);if(!silent)showLoader(false);}
+}
+
+// ─── LIVE AUTO-REFRESH ────────────────────────────────────
+// Google Apps Script web apps have no push/websocket channel, so "real time" here
+// means: poll silently in the background, and always refresh the instant the admin
+// tabs back in. This keeps Monthly Income and every other stat current even when a
+// payment was recorded from another device/tab.
+let autoRefreshIv=null,autoRefreshVisListenerAdded=false;
+function startAutoRefresh(refreshMs){
+  if(autoRefreshIv)clearInterval(autoRefreshIv);
+  autoRefreshIv=setInterval(()=>{
+    const modalOpen=document.getElementById('dynamicModal')?.style.display==='block';
+    const pageHidden=document.hidden;
+    if(!modalOpen&&!pageHidden)loadDashboardStats(true); // silent = no loader flicker
+  },refreshMs||30000);
+
+  if(!autoRefreshVisListenerAdded){
+    autoRefreshVisListenerAdded=true;
+    document.addEventListener('visibilitychange',()=>{
+      if(!document.hidden)loadDashboardStats(true);
+    });
+  }
 }
 
 function renderStudentTable(data){
@@ -2307,6 +2603,7 @@ document.getElementById('adminLoginBtn').addEventListener('click',async function
     sb.classList.add('open');
     if(isMobile()) sb.classList.remove('mobile-open');
     loadDashboardStats();loadPendingCount();
+    startAutoRefresh();
     showToast('<i class="fas fa-check"></i> Welcome, Admin!');
     document.getElementById('adminPass').value='';
     initFeeReminder();initPrintButtons();initPaymentCard();
@@ -2385,6 +2682,7 @@ document.querySelectorAll('.sidebar-link').forEach(el=>{
     else if(nav==='achievements')showAchievementsUI();
     else if(nav==='reports')showDataFilterUI();
     else if(nav==='announce')openWhatsApp();
+    else if(nav==='sms')openSmsManager();
   });
 });
 document.querySelectorAll('.bnav-item').forEach(el=>{el.addEventListener('click',function(){
@@ -2435,8 +2733,388 @@ document.getElementById('themeToggleBtn')?.addEventListener('click',()=>{
 });
 document.querySelectorAll('.action-btn').forEach(btn=>{btn.addEventListener('click',function(){
   let s=this.dataset.section;
-  if(s==='register')showRegisterModal();else if(s==='update')showUpdateModal();else if(s==='attend')showAttendanceGradeSelect();else if(s==='exam')showExamGradeSelect();else if(s==='skill')showSkillGradeSelect();else if(s==='payment')showPaymentGradeSelect();else if(s==='assignments')showAssignmentsUI();else if(s==='achievements')showAchievementsUI();else if(s==='filter')showFilterModal();else if(s==='datafilter')showDataFilterUI();else if(s==='promote')promoteAllGrades();else if(s==='whatsapp')openWhatsApp();
+  if(s==='register')showRegisterModal();
+  else if(s==='update')showUpdateModal();
+  else if(s==='attend')showAttendanceGradeSelect();
+  else if(s==='exam')showExamGradeSelect();
+  else if(s==='skill')showSkillGradeSelect();
+  else if(s==='payment')showPaymentGradeSelect();
+  else if(s==='assignments')showAssignmentsUI();
+  else if(s==='achievements')showAchievementsUI();
+  else if(s==='filter')showFilterModal();
+  else if(s==='datafilter')showDataFilterUI();
+  else if(s==='promote')promoteAllGrades();
+  else if(s==='whatsapp')openWhatsApp();
+  // ── NEW FEE MANAGEMENT ──
+  else if(s==='feemgmt')showFeeMgmtUI();
+  else if(s==='freecard')showFreeCardUI();
+  else if(s==='feestatus')showFeeStatusUI();
+  else if(s==='septauto')showSeptAutoUI();
+  else if(s==='gradefee')showGradeFeeUI();
+  else if(s==='tempstudents')showTempStudentsUI();
+  else if(s==='tempfees')showTempFeeUI();
+  else if(s==='sms')openSmsManager();
 });});
+
+// ══════════════════════════════════════════════════
+// FEE MANAGEMENT UI SYSTEM (NEW)
+// ══════════════════════════════════════════════════
+
+// ── 1. FEE CATEGORY MANAGEMENT ──────────────────
+let allFeeCategories=[];
+
+async function showFeeMgmtUI(){
+  openModal(`<div class="modal-box" style="max-width:860px;">
+    <div class="modal-head"><h2><i class="fas fa-tags"></i> Fee Category Management</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <button onclick="switchFeeTab('list')" id="ftbList" style="background:rgba(99,102,241,0.2);border:1px solid var(--accent);color:var(--accent2);padding:7px 16px;border-radius:12px;cursor:pointer;font-size:0.78rem;font-weight:600;"><i class="fas fa-list"></i> Categories</button>
+      <button onclick="switchFeeTab('add')"  id="ftbAdd"  style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text2);padding:7px 16px;border-radius:12px;cursor:pointer;font-size:0.78rem;font-weight:600;"><i class="fas fa-plus"></i> Add New</button>
+      <button onclick="switchFeeTab('hist')" id="ftbHist" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text2);padding:7px 16px;border-radius:12px;cursor:pointer;font-size:0.78rem;font-weight:600;"><i class="fas fa-history"></i> Change Log</button>
+    </div>
+
+    <!-- LIST -->
+    <div id="ftp-list">
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <input id="fcSearch" placeholder="Search..." style="flex:1;min-width:140px;border-radius:10px;padding:7px 12px;font-size:0.78rem;" oninput="filterFeeList()">
+        <button class="btn-main btn-sm" onclick="loadFeeCategories()"><i class="fas fa-sync-alt"></i></button>
+      </div>
+      <div id="feeCatList" style="max-height:400px;overflow-y:auto;"><div style="text-align:center;padding:30px;color:var(--text3);">Loading...</div></div>
+    </div>
+
+    <!-- ADD -->
+    <div id="ftp-add" style="display:none;">
+      <div class="grid2">
+        <div class="form-group">
+          <label>Grade (e.g. 10, 11, 12)</label>
+          <select id="fcGR" style="border-radius:10px;padding:8px 12px;font-size:0.82rem;background:var(--card2);border:1px solid var(--border);color:var(--text);width:100%;">
+            <option value="">-- Select Grade --</option>
+            ${[1,2,3,4,5,6,7,8,9,10,11,12,13].map(g=>`<option value="${g}">Grade ${g}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label>Main Category</label><input id="fcMC" placeholder="O/L, A/L, General..."></div>
+      </div>
+      <div class="grid2">
+        <div class="form-group"><label>Extra / Sub Category</label><input id="fcEC" placeholder="Normal, Paper Class, Spoken..."></div>
+        <div class="form-group"><label>Monthly Fee (Rs.)</label><input id="fcFee" type="number" placeholder="1000" min="0"></div>
+      </div>
+      <div class="form-group"><label>Effective From</label><input id="fcDate" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+      <div id="fcMsg" style="font-size:0.72rem;color:var(--red);margin-bottom:8px;min-height:16px;"></div>
+      <div class="flex-row">
+        <button class="btn-main" onclick="addFeeCategoryUI()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn-main" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);" onclick="document.getElementById('fcGR').value='';document.getElementById('fcMC').value='';document.getElementById('fcEC').value='';document.getElementById('fcFee').value='';"><i class="fas fa-times"></i> Clear</button>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="ftp-hist" style="display:none;">
+      <button class="btn-main btn-sm" onclick="loadFeeHistory()" style="margin-bottom:10px;"><i class="fas fa-sync-alt"></i> Load</button>
+      <div id="feeHistList" style="max-height:380px;overflow-y:auto;"><p style="color:var(--text3);padding:20px;text-align:center;">Click Load to view history</p></div>
+    </div>
+  </div>`);
+  loadFeeCategories();
+}
+
+function switchFeeTab(t){
+  ['list','add','hist'].forEach(x=>{
+    const pane=document.getElementById('ftp-'+x);const btn=document.getElementById('ftb'+x.charAt(0).toUpperCase()+x.slice(1));
+    if(pane)pane.style.display=x===t?'block':'none';
+    if(btn){btn.style.background=x===t?'rgba(99,102,241,0.2)':'rgba(255,255,255,0.05)';btn.style.color=x===t?'var(--accent2)':'var(--text2)';btn.style.borderColor=x===t?'var(--accent)':'var(--border)';}
+  });
+  if(t==='hist')loadFeeHistory();
+}
+
+async function loadFeeCategories(){
+  const el=document.getElementById('feeCatList');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3);">Loading...</div>';
+  const r=await apiCall('getFeeCategories','GET',{onlyActive:'false'});
+  if(!r.success||!r.data){el.innerHTML='<p style="color:var(--text3);padding:20px;text-align:center;">No categories found</p>';return;}
+  allFeeCategories=r.data;renderFeeCategories(r.data);
+}
+
+function renderFeeCategories(cats){
+  const el=document.getElementById('feeCatList');if(!el)return;
+  if(!cats.length){el.innerHTML='<p style="color:var(--text3);padding:20px;text-align:center;">No categories. Click "Add New" to create.</p>';return;}
+  el.innerHTML=cats.map(c=>{
+    // Support both Grade (new) and Grade_Range (old)
+    const gradeLabel=c.Grade?`Grade ${c.Grade}`:(c.Grade_Range?`Gr.${c.Grade_Range}`:'—');
+    return `<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+            <span style="font-weight:700;font-size:0.88rem;color:var(--text);">${gradeLabel} — ${c.Main_Category||''} ${c.Extra_Category?'('+c.Extra_Category+')':''}</span>
+            <span style="background:${c.Status==='Active'?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)'};color:${c.Status==='Active'?'var(--green)':'var(--red)'};padding:1px 8px;border-radius:10px;font-size:0.6rem;">${c.Status}</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text2);">
+            <span style="color:var(--green);font-weight:700;font-size:0.92rem;">Rs.${Number(c.Monthly_Fee||0).toLocaleString()}/month</span>
+            <span style="color:var(--text3);margin-left:10px;">From: ${c.Effective_From||'-'} · ID: ${c.Category_ID}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="editFeeCategoryUI('${c.Category_ID}')" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:var(--amber);padding:5px 12px;border-radius:8px;cursor:pointer;font-size:0.7rem;"><i class="fas fa-edit"></i></button>
+          <button onclick="toggleFeeCat('${c.Category_ID}','${c.Status}')" style="background:${c.Status==='Active'?'rgba(244,63,94,0.15)':'rgba(16,185,129,0.15)'};border:1px solid ${c.Status==='Active'?'rgba(244,63,94,0.3)':'rgba(16,185,129,0.3)'};color:${c.Status==='Active'?'var(--red)':'var(--green)'};padding:5px 12px;border-radius:8px;cursor:pointer;font-size:0.7rem;"><i class="fas ${c.Status==='Active'?'fa-ban':'fa-check'}"></i></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterFeeList(){
+  const q=(document.getElementById('fcSearch')?.value||'').toLowerCase();
+  renderFeeCategories(allFeeCategories.filter(c=>(c.Main_Category||'').toLowerCase().includes(q)||(c.Extra_Category||'').toLowerCase().includes(q)||(c.Grade_Range||'').includes(q)));
+}
+
+async function addFeeCategoryUI(){
+  const gr=document.getElementById('fcGR')?.value.trim();
+  const mc=document.getElementById('fcMC')?.value.trim();
+  const ec=document.getElementById('fcEC')?.value.trim();
+  const fee=document.getElementById('fcFee')?.value;
+  const dt=document.getElementById('fcDate')?.value;
+  const msg=document.getElementById('fcMsg');
+  if(!gr||!fee){if(msg)msg.textContent='⚠ Grade and fee are required';return;}
+  if(msg)msg.textContent='';
+  showLoader(true);
+  const r=await apiCall('addFeeCategory','POST',{grade:gr,gradeRange:gr,mainCategory:mc||'General',extraCategory:ec||'Normal',monthlyFee:Number(fee),effectiveFrom:dt});
+  showLoader(false);
+  if(r.success){showToast('Fee added for Grade '+gr+' — ID: '+r.categoryId);loadFeeCategories();switchFeeTab('list');}
+  else showToast(r.message||'Failed',true);
+}
+
+async function editFeeCategoryUI(catId){
+  const cat=allFeeCategories.find(c=>c.Category_ID===catId);if(!cat)return;
+  const res=await Swal.fire({
+    title:'Edit: '+cat.Main_Category+' '+(cat.Extra_Category||''),
+    html:`<div style="text-align:left;display:grid;gap:8px;">
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Grade Range</label><input id="e-gr" class="swal2-input" value="${cat.Grade_Range||''}"></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Main Category</label><input id="e-mc" class="swal2-input" value="${cat.Main_Category||''}"></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Extra Category</label><input id="e-ec" class="swal2-input" value="${cat.Extra_Category||''}"></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Monthly Fee (Rs.)</label><input id="e-fee" class="swal2-input" type="number" value="${cat.Monthly_Fee||0}"></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Apply fee change to:</label>
+        <select id="e-apply" class="swal2-input"><option value="New">New Students Only</option><option value="All">All Existing Students</option></select></div></div>`,
+    showCancelButton:true,confirmButtonColor:'#6366f1',cancelButtonColor:'#475569',confirmButtonText:'Save',
+    preConfirm:()=>({gradeRange:document.getElementById('e-gr').value,mainCategory:document.getElementById('e-mc').value,extraCategory:document.getElementById('e-ec').value,monthlyFee:Number(document.getElementById('e-fee').value),applyType:document.getElementById('e-apply').value})
+  });
+  if(!res.isConfirmed)return;
+  showLoader(true);
+  const r=await apiCall('applyFeeChange','POST',{categoryId:catId,newFee:res.value.monthlyFee,applyType:res.value.applyType,updatedBy:'Admin',...res.value});
+  showLoader(false);
+  if(r.success){showToast(`Updated! Applied to ${r.applied||0} students.`);loadFeeCategories();}
+  else showToast(r.message||'Failed',true);
+}
+
+async function toggleFeeCat(catId,status){
+  const newStatus=status==='Active'?'Inactive':'Active';
+  const conf=await Swal.fire({title:(newStatus==='Inactive'?'Disable':'Enable')+' category?',icon:'warning',showCancelButton:true,confirmButtonColor:newStatus==='Inactive'?'#f43f5e':'#10b981',confirmButtonText:newStatus==='Inactive'?'Disable':'Enable'});
+  if(!conf.isConfirmed)return;
+  showLoader(true);const r=await apiCall('updateFeeCategory','POST',{categoryId:catId,status:newStatus});showLoader(false);
+  if(r.success){showToast('Category '+(newStatus==='Inactive'?'disabled':'enabled'));loadFeeCategories();}
+  else showToast(r.message||'Failed',true);
+}
+
+async function loadFeeHistory(){
+  const el=document.getElementById('feeHistList');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);">Loading...</div>';
+  const r=await apiCall('getFilteredDataByGrade','POST',{sheetName:'Fee_Update_History',grade:''});
+  if(!r.success||!r.data||!r.data.length){el.innerHTML='<p style="color:var(--text3);padding:20px;text-align:center;">No history yet</p>';return;}
+  el.innerHTML=r.data.slice().reverse().map(h=>`
+    <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+      <div>
+        <span style="font-size:0.75rem;font-weight:600;color:var(--text);">Cat: ${h.Category_ID||'-'}</span>
+        <span style="margin:0 6px;font-size:0.72rem;color:var(--red);">Rs.${h.Old_Fee||0}</span>
+        <i class="fas fa-arrow-right" style="color:var(--text3);font-size:0.6rem;"></i>
+        <span style="margin-left:6px;font-size:0.72rem;color:var(--green);">Rs.${h.New_Fee||0}</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span style="background:rgba(99,102,241,0.15);color:var(--accent2);padding:2px 8px;border-radius:8px;font-size:0.6rem;">${h.Apply_Type||'-'}</span>
+        <span style="font-size:0.6rem;color:var(--text3);">${h.Date||'-'}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── 2. FREE CARD MANAGEMENT ──────────────────────
+async function showFreeCardUI(){
+  openModal(`<div class="modal-box" style="max-width:720px;">
+    <div class="modal-head"><h2><i class="fas fa-gift" style="color:var(--green);"></i> Free Card Management</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:14px;margin-bottom:14px;">
+      <h3 style="font-size:0.85rem;color:var(--green);margin-bottom:10px;"><i class="fas fa-hand-holding-heart"></i> Give Free Card</h3>
+      <div class="grid2">
+        <div class="form-group"><label>Student ID</label><input id="fcSID" placeholder="S001"></div>
+        <div class="form-group"><label>Reason</label><input id="fcReason" placeholder="Scholarship, hardship..."></div>
+      </div>
+      <div class="grid2">
+        <div class="form-group"><label>Start Date</label><input id="fcStart" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+        <div class="form-group"><label>End Date (optional)</label><input id="fcEnd" type="date"></div>
+      </div>
+      <div class="flex-row">
+        <button class="btn-main" style="background:linear-gradient(135deg,var(--green),#059669);" onclick="giveFreeCardUI()"><i class="fas fa-gift"></i> Give Free Card</button>
+        <button class="btn-main btn-danger" onclick="revokeFreeCardUI()"><i class="fas fa-undo"></i> Revoke</button>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:0.8rem;font-weight:600;color:var(--text);">Active Free Cards</span>
+      <button class="btn-main btn-sm" onclick="loadFreeCards()"><i class="fas fa-sync-alt"></i></button>
+    </div>
+    <div id="freeCardList"><div style="text-align:center;padding:20px;color:var(--text3);">Loading...</div></div>
+  </div>`);
+  loadFreeCards();
+}
+
+async function giveFreeCardUI(){
+  const sid=document.getElementById('fcSID')?.value.trim();
+  const reason=document.getElementById('fcReason')?.value.trim();
+  const start=document.getElementById('fcStart')?.value;
+  const end=document.getElementById('fcEnd')?.value;
+  if(!sid){showToast('Enter Student ID',true);return;}
+  showLoader(true);
+  const r=await apiCall('giveStudentFreeCard','POST',{studentId:sid,reason:reason||'Admin decision',startDate:start,endDate:end||''});
+  showLoader(false);
+  if(r.success){showToast('Free card given to '+sid);document.getElementById('fcSID').value='';document.getElementById('fcReason').value='';loadFreeCards();}
+  else showToast(r.message||'Failed',true);
+}
+
+async function revokeFreeCardUI(){
+  const {value:sid}=await Swal.fire({title:'Revoke Free Card',input:'text',inputPlaceholder:'Enter Student ID',showCancelButton:true,confirmButtonColor:'#f43f5e',confirmButtonText:'Revoke'});
+  if(!sid)return;
+  showLoader(true);const r=await apiCall('revokeStudentFreeCard','POST',{studentId:sid});showLoader(false);
+  if(r.success){showToast('Revoked for '+sid);loadFreeCards();}else showToast(r.message||'Failed',true);
+}
+
+async function loadFreeCards(){
+  const el=document.getElementById('freeCardList');if(!el)return;
+  const r=await apiCall('getFreeCardList','GET');
+  if(!r.success||!r.data||!r.data.length){el.innerHTML='<p style="color:var(--text3);padding:16px;text-align:center;font-size:0.8rem;">No active free cards</p>';return;}
+  el.innerHTML=`<div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Student ID</th><th>Reason</th><th>Start</th><th>End</th><th>Action</th></tr></thead>
+    <tbody>${r.data.map(f=>`<tr>
+      <td style="font-weight:700;color:var(--green);">${f.Student_ID||'-'}</td>
+      <td>${f.Reason||'-'}</td><td>${f.Start_Date||'-'}</td><td>${f.End_Date||'No end'}</td>
+      <td><button onclick="revokeCard('${f.Student_ID}')" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);color:var(--red);padding:3px 10px;border-radius:8px;cursor:pointer;font-size:0.68rem;"><i class="fas fa-undo"></i></button></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+async function revokeCard(sid){
+  const conf=await Swal.fire({title:'Revoke free card for '+sid+'?',icon:'warning',showCancelButton:true,confirmButtonColor:'#f43f5e',confirmButtonText:'Revoke'});
+  if(!conf.isConfirmed)return;
+  showLoader(true);const r=await apiCall('revokeStudentFreeCard','POST',{studentId:sid});showLoader(false);
+  if(r.success){showToast('Revoked for '+sid);loadFreeCards();}else showToast(r.message||'Failed',true);
+}
+
+// ── 3. FEE STATUS VIEWER ────────────────────────
+let allFeeStatus=[];
+
+async function showFeeStatusUI(){
+  openModal(`<div class="modal-box" style="max-width:940px;">
+    <div class="modal-head"><h2><i class="fas fa-user-tag" style="color:var(--amber);"></i> Student Fee Status</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:14px;margin-bottom:14px;">
+      <h3 style="font-size:0.82rem;color:var(--amber);margin-bottom:10px;"><i class="fas fa-search"></i> Lookup / Override</h3>
+      <div class="grid2">
+        <div class="form-group"><label>Student ID</label><input id="fsSID" placeholder="S001"></div>
+        <div style="display:flex;gap:8px;align-items:flex-end;padding-bottom:12px;">
+          <button class="btn-main" onclick="lookupFee()" style="flex:1;"><i class="fas fa-search"></i> Lookup</button>
+          <button class="btn-main" onclick="overrideFeeUI()" style="flex:1;background:rgba(245,158,11,0.2);border:1px solid var(--amber);color:var(--amber);"><i class="fas fa-pen"></i> Override</button>
+        </div>
+      </div>
+      <div id="fsResult" style="margin-top:8px;min-height:20px;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+      <span style="font-size:0.8rem;font-weight:600;color:var(--text);">All Students Fee Status</span>
+      <div style="display:flex;gap:8px;">
+        <input id="fsSearch" placeholder="Search..." style="border-radius:10px;padding:5px 10px;font-size:0.72rem;width:140px;" oninput="filterFeeStatus()">
+        <button class="btn-main btn-sm" onclick="loadAllFeeStatus()"><i class="fas fa-sync-alt"></i> Load</button>
+      </div>
+    </div>
+    <div id="fsAllList" style="max-height:340px;overflow:auto;"><p style="color:var(--text3);padding:16px;text-align:center;font-size:0.8rem;">Click Load to view</p></div>
+  </div>`);
+}
+
+async function lookupFee(){
+  const sid=document.getElementById('fsSID')?.value.trim();if(!sid){showToast('Enter Student ID',true);return;}
+  showLoader(true);const r=await apiCall('getStudentFeeDetails','GET',{id:sid});showLoader(false);
+  const el=document.getElementById('fsResult');if(!el)return;
+  if(!r.success||!r.data){el.innerHTML=`<p style="color:var(--red);font-size:0.78rem;">No fee record for ${sid}</p>`;return;}
+  const d=r.data;const isFree=d.Fee_Status==='FREE';
+  el.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;">
+    <div><div style="font-size:0.6rem;color:var(--text3);">ID</div><div style="font-weight:700;color:var(--accent2);">${d.Student_ID||'-'}</div></div>
+    <div><div style="font-size:0.6rem;color:var(--text3);">Grade</div><div style="font-weight:600;">Gr.${d.Grade||'-'}</div></div>
+    <div><div style="font-size:0.6rem;color:var(--text3);">Category</div><div style="font-weight:600;font-size:0.78rem;">${d.Category||'-'}${d.Extra_Category?' + '+d.Extra_Category:''}</div></div>
+    <div><div style="font-size:0.6rem;color:var(--text3);">Fee</div><div style="font-weight:700;font-size:1.1rem;color:${isFree?'var(--green)':'var(--amber)'};">${isFree?'FREE':'Rs.'+Number(d.Monthly_Fee||0).toLocaleString()}</div></div>
+    <div><div style="font-size:0.6rem;color:var(--text3);">Status</div><span style="background:${isFree?'rgba(16,185,129,0.15)':'rgba(99,102,241,0.15)'};color:${isFree?'var(--green)':'var(--accent2)'};padding:2px 8px;border-radius:8px;font-size:0.62rem;">${d.Fee_Status||'-'}</span></div>
+    <div><div style="font-size:0.6rem;color:var(--text3);">Source</div><div style="font-size:0.72rem;color:var(--text2);">${d.Fee_Source||'-'}</div></div>
+  </div>`;
+}
+
+async function overrideFeeUI(){
+  const sid=document.getElementById('fsSID')?.value.trim();
+  if(!allFeeCategories.length){const r=await apiCall('getFeeCategories','GET',{onlyActive:'true'});if(r.success)allFeeCategories=r.data;}
+  const catOpts=allFeeCategories.filter(c=>c.Status==='Active').map(c=>`<option value="${c.Monthly_Fee}|${c.Main_Category}|${c.Extra_Category}">${c.Main_Category} ${c.Extra_Category||''} — Rs.${c.Monthly_Fee}</option>`).join('');
+  const {value:res}=await Swal.fire({
+    title:'Override Fee'+(sid?' for '+sid:''),
+    html:`<div style="text-align:left;display:grid;gap:8px;">
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Student ID</label><input id="ov-sid" class="swal2-input" value="${sid||''}" style="margin:4px 0;"></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Select Category</label><select id="ov-cat" class="swal2-input" style="margin:4px 0;" onchange="document.getElementById('ov-fee').value=this.value.split('|')[0]||''"><option value="">-- Select --</option>${catOpts}</select></div>
+      <div><label style="font-size:0.7rem;color:#94a3b8;">Or Custom Fee (Rs.)</label><input id="ov-fee" class="swal2-input" type="number" placeholder="Amount" style="margin:4px 0;"></div>
+    </div>`,
+    showCancelButton:true,confirmButtonColor:'#f59e0b',confirmButtonText:'Apply Override',
+    preConfirm:()=>({studentId:document.getElementById('ov-sid').value.trim(),fee:Number(document.getElementById('ov-fee').value)||0,catVal:document.getElementById('ov-cat').value})
+  });
+  if(!res||!res.studentId)return;
+  const cp=res.catVal?res.catVal.split('|'):[];
+  showLoader(true);
+  const r=await apiCall('overrideStudentFee','POST',{studentId:res.studentId,monthlyFee:res.fee,category:cp[1]||'',extraCategory:cp[2]||'',grade:''});
+  showLoader(false);
+  if(r.success){showToast('Fee overridden for '+res.studentId);lookupFee();}else showToast(r.message||'Failed',true);
+}
+
+async function loadAllFeeStatus(){
+  const el=document.getElementById('fsAllList');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);">Loading...</div>';
+  const r=await apiCall('getAllStudentFeeStatus','GET');
+  if(!r.success||!r.data||!r.data.length){el.innerHTML='<p style="color:var(--text3);padding:16px;text-align:center;">No records</p>';return;}
+  allFeeStatus=r.data;renderFeeStatusTable(r.data);
+}
+
+function filterFeeStatus(){
+  const q=(document.getElementById('fsSearch')?.value||'').toLowerCase();
+  renderFeeStatusTable(allFeeStatus.filter(s=>(s.Student_ID||'').toLowerCase().includes(q)||(s.Category||'').toLowerCase().includes(q)));
+}
+
+function renderFeeStatusTable(data){
+  const el=document.getElementById('fsAllList');if(!el)return;
+  if(!data.length){el.innerHTML='<p style="color:var(--text3);padding:16px;text-align:center;">No records</p>';return;}
+  el.innerHTML=`<table class="tbl" style="min-width:560px;">
+    <thead><tr><th>ID</th><th>Grade</th><th>Category</th><th>Fee</th><th>Status</th><th>Source</th><th>Updated</th></tr></thead>
+    <tbody>${data.map(s=>`<tr>
+      <td style="font-weight:700;color:var(--accent2);">${s.Student_ID||'-'}</td>
+      <td>Gr.${s.Grade||'-'}</td>
+      <td style="font-size:0.68rem;">${s.Category||'-'}${s.Extra_Category?' + '+s.Extra_Category:''}</td>
+      <td style="font-weight:700;color:${s.Fee_Status==='FREE'?'var(--green)':'var(--amber)'};">${s.Fee_Status==='FREE'?'FREE':'Rs.'+Number(s.Monthly_Fee||0).toLocaleString()}</td>
+      <td><span style="background:${s.Fee_Status==='FREE'?'rgba(16,185,129,0.15)':'rgba(99,102,241,0.15)'};color:${s.Fee_Status==='FREE'?'var(--green)':'var(--accent2)'};padding:2px 8px;border-radius:8px;font-size:0.6rem;">${s.Fee_Status||'-'}</span></td>
+      <td style="font-size:0.65rem;color:var(--text3);">${s.Fee_Source||'-'}</td>
+      <td style="font-size:0.62rem;color:var(--text3);">${s.Updated_Date||'-'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+// ── 4. SEPTEMBER AUTOMATION ─────────────────────
+async function showSeptAutoUI(){
+  const conf=await Swal.fire({
+    title:'🤖 September Automation',
+    html:`<div style="text-align:left;font-size:0.82rem;line-height:1.8;">
+      <p style="margin-bottom:8px;">Upgrades all <strong>Grade 11 O/L students</strong> to Paper Class fee.</p>
+      <ul style="color:#94a3b8;padding-left:16px;font-size:0.78rem;">
+        <li>✅ Category → O/L + Paper Class</li>
+        <li>✅ Fee updated from Fee_Management</li>
+        <li>❌ Skips FREE students</li>
+        <li>❌ Skips Override students</li>
+      </ul>
+    </div>`,
+    icon:'info',showCancelButton:true,
+    confirmButtonColor:'#22d3ee',cancelButtonColor:'#475569',
+    confirmButtonText:'<i class="fas fa-robot"></i> Run Now'
+  });
+  if(!conf.isConfirmed)return;
+  showLoader(true);const r=await apiCall('runSeptemberAutomation','POST',{});showLoader(false);
+  if(r.success){Swal.fire({title:'Done!',html:`Updated <strong>${r.updated||0}</strong> Grade 11 students to Paper Class.`,icon:'success'});}
+  else Swal.fire({title:'Error',text:r.message||'Failed — only runs in September',icon:'error'});
+}
 document.getElementById('viewPendingBtn')?.addEventListener('click',showPendingApprovals);
 document.getElementById('fab')?.addEventListener('click',()=>showRegisterModal());
 document.getElementById('quickAddBtn')?.addEventListener('click',()=>showRegisterModal());
@@ -2530,13 +3208,38 @@ let feeStorage={};
 try{let s=localStorage.getItem('feeReminderHistory');if(s)feeStorage=JSON.parse(s);}catch(e){}
 document.head.insertAdjacentHTML('beforeend',`<style>.swal2-container{z-index:200000!important;}.swal2-popup{z-index:200001!important;}</style>`);
 function isPast21(){return new Date().getDate()>21;}
-function getDueMonths(sid,payments){
-  let due=[];let now=new Date();let cy=now.getFullYear();let cmi=now.getMonth();let cmn=months[cmi];
-  let paid=new Set();
-  for(let p of payments){let pid=p.ID||p.id;let pm=p.Month||p.month;let py=String(p.Year||p.year);if(pid===sid)paid.add(pm+'_'+py);}
+// PERF: buildPaymentIndex() groups all payments by student ID ONCE (O(payments)).
+// getDueMonths() used to re-scan the ENTIRE payments array for every single
+// student to figure out what they'd paid — with many students and many months
+// of payment history that's students × payments comparisons, which is what made
+// "Total Students" / "Due Payments" get slower and slower as the sheets grew.
+// Passing the pre-built index in makes each getDueMonths() call O(1) instead.
+// The function still works exactly as before (same result) if no index is
+// passed — nothing that already calls getDueMonths(sid, payments) breaks.
+function buildPaymentIndex(payments){
+  const idx=new Map();
+  (payments||[]).forEach(p=>{
+    const pid=p.ID||p.id;const pm=p.Month||p.month;const py=String(p.Year||p.year);
+    if(!idx.has(pid))idx.set(pid,new Set());
+    idx.get(pid).add(pm+'_'+py);
+  });
+  return idx;
+}
+function getDueMonths(sid,payments,paymentIndex){
+  // Defensive local fallback — guarantees this never throws "months is not defined"
+  // regardless of script load order or environment quirks.
+  const monthsArr=(typeof months!=='undefined'&&months)?months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let due=[];let now=new Date();let cy=now.getFullYear();let cmi=now.getMonth();let cmn=monthsArr[cmi];
+  let paid;
+  if(paymentIndex){
+    paid=paymentIndex.get(sid)||new Set();
+  }else{
+    paid=new Set();
+    for(let p of payments){let pid=p.ID||p.id;let pm=p.Month||p.month;let py=String(p.Year||p.year);if(pid===sid)paid.add(pm+'_'+py);}
+  }
   if(isPast21()&&!paid.has(cmn+'_'+cy))due.push({month:cmn,year:cy});
-  for(let i=1;i<=2;i++){let pi=cmi-i;let py=cy;if(pi<0){pi+=12;py--;}let pn=months[pi];if(!paid.has(pn+'_'+py)&&!due.some(d=>d.month===pn&&d.year===py))due.push({month:pn,year:py});}
-  due.sort((a,b)=>a.year!==b.year?a.year-b.year:months.indexOf(a.month)-months.indexOf(b.month));
+  for(let i=1;i<=2;i++){let pi=cmi-i;let py=cy;if(pi<0){pi+=12;py--;}let pn=monthsArr[pi];if(!paid.has(pn+'_'+py)&&!due.some(d=>d.month===pn&&d.year===py))due.push({month:pn,year:py});}
+  due.sort((a,b)=>a.year!==b.year?a.year-b.year:monthsArr.indexOf(a.month)-monthsArr.indexOf(b.month));
   return due;
 }
 function initFeeReminder(){
@@ -2561,6 +3264,7 @@ window.openFeeReminder=function(){
       <button id="refreshFeeData" class="btn-main btn-sm"><i class="fas fa-sync-alt"></i> Refresh</button>
       <button id="exportFeeExcel" class="btn-main btn-sm" style="background:rgba(16,185,129,0.2);border:1px solid var(--green);color:var(--green);"><i class="fas fa-file-excel"></i> Export</button>
       <button id="bulkFeeWhatsApp" class="btn-main btn-sm" style="background:rgba(37,211,102,0.2);border:1px solid #25D366;color:#25D366;"><i class="fab fa-whatsapp"></i> Bulk</button>
+      <button id="bulkFeeSms" class="btn-main btn-sm" style="background:rgba(8,145,178,0.2);border:1px solid #0891b2;color:#0891b2;"><i class="fas fa-sms"></i> Bulk SMS</button>
       <button id="printFeeReport" class="btn-main btn-sm" style="background:rgba(245,158,11,0.2);border:1px solid var(--amber);color:var(--amber);"><i class="fas fa-print"></i> Print</button>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);">
@@ -2583,6 +3287,7 @@ window.openFeeReminder=function(){
   document.getElementById('refreshFeeData').onclick=loadFeeData;
   document.getElementById('exportFeeExcel').onclick=exportDueExcel;
   document.getElementById('bulkFeeWhatsApp').onclick=bulkWASend;
+  document.getElementById('bulkFeeSms').onclick=bulkSmsSend;
   document.getElementById('printFeeReport').onclick=printFeeRpt;
   document.getElementById('feeYearSelect').onchange=()=>{feeCP=1;loadFeeData();};
   document.getElementById('feeSearchBox').oninput=()=>{feeCP=1;renderFeeTable();};
@@ -2590,10 +3295,14 @@ window.openFeeReminder=function(){
 };
 async function loadFeeData(){
   let tb=document.getElementById('feeTBody');if(tb)tb.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text2);"><div class="spinner" style="margin:0 auto 10px;"></div>Loading...</td></tr>`;
-  let sr=await apiCall('getAllStudents','GET');let pr=await apiCall('getAllPayments','GET');
+  // PERF: fetch both in parallel (was sequential) and build the payment index
+  // once instead of letting getDueMonths rescan the whole payments array for
+  // every single student.
+  let [sr,pr]=await Promise.all([apiCall('getAllStudents','GET'),apiCall('getAllPayments','GET')]);
   let students=sr.success?sr.data:[];let payments=pr.success?pr.data:[];
+  let paymentIndex=buildPaymentIndex(payments);
   feeDataList=[];let tda=0;
-  for(let s of students){let dm=getDueMonths(s.id,payments);if(dm.length>0){let ta=dm.length*1000;feeDataList.push({id:s.id,name:s.name||'N/A',phone:s.phone||'',grade:s.grade||'N/A',fee:1000,dueMonths:dm,dueCount:dm.length,dueText:dm.map(d=>`${d.month} ${d.year}`).join(', '),totalDue:ta});tda+=ta;}}
+  for(let s of students){let dm=getDueMonths(s.id,payments,paymentIndex);if(dm.length>0){let ta=dm.length*1000;feeDataList.push({id:s.id,name:s.name||'N/A',phone:s.phone||'',grade:s.grade||'N/A',fee:1000,dueMonths:dm,dueCount:dm.length,dueText:dm.map(d=>`${d.month} ${d.year}`).join(', '),totalDue:ta});tda+=ta;}}
   feeDataList.sort((a,b)=>b.dueCount-a.dueCount);
   let tc=document.getElementById('totalCStat');let dc=document.getElementById('dueMStat');let ta2=document.getElementById('totalAStat');let sc=document.getElementById('sentSStat');
   if(tc)tc.innerText=feeDataList.length;if(dc)dc.innerText=feeDataList.reduce((s,x)=>s+x.dueCount,0);if(ta2)ta2.innerHTML=`Rs.${tda.toLocaleString()}`;if(sc)sc.innerText=Object.keys(feeStorage).length;
@@ -2606,11 +3315,12 @@ function renderFeeTable(){
   let pg=filtered.slice((feeCP-1)*feeRPP,feeCP*feeRPP);
   let tb=document.getElementById('feeTBody');
   if(!pg.length){tb.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--green);"><i class="fas fa-check-circle" style="font-size:2rem;display:block;margin-bottom:10px;"></i>All payments up to date!</td></tr>`;document.getElementById('feePagDiv').innerHTML='';return;}
-  tb.innerHTML=pg.map(s=>`<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 8px;"><input type="checkbox" class="feeCB" data-id="${s.id}" data-name="${s.name.replace(/'/g,"\\'")}" data-phone="${s.phone}" data-fee="${s.fee}" data-dm='${JSON.stringify(s.dueMonths)}'></td><td style="padding:10px 8px;font-weight:600;color:var(--accent2);">${s.id}</td><td style="padding:10px 8px;">${s.name}</td><td style="padding:10px 8px;">${s.phone||'<span style="color:var(--red)">No phone</span>'}</td><td style="padding:10px 8px;">${s.grade}</td><td style="padding:10px 8px;">Rs.${s.fee.toLocaleString()}</td><td style="padding:10px 8px;"><span style="background:rgba(245,158,11,0.15);color:var(--amber);padding:2px 8px;border-radius:10px;font-size:0.65rem;">${s.dueCount}m</span><br><span style="font-size:0.6rem;color:var(--text2);">${s.dueText}</span></td><td style="padding:10px 8px;font-weight:700;color:var(--red);">Rs.${s.totalDue.toLocaleString()}</td><td style="padding:10px 8px;"><button class="waBtn" data-id="${s.id}" data-name="${s.name.replace(/'/g,"\\'")}" data-phone="${s.phone}" data-fee="${s.fee}" data-dm='${JSON.stringify(s.dueMonths)}' ${!s.phone?'disabled':''} style="background:#25D36620;border:1px solid #25D366;color:#25D366;border-radius:20px;padding:5px 12px;cursor:pointer;font-size:0.7rem;"><i class="fab fa-whatsapp"></i></button></td></tr>`).join('');
+  tb.innerHTML=pg.map(s=>`<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 8px;"><input type="checkbox" class="feeCB" data-id="${s.id}" data-name="${s.name.replace(/'/g,"\\'")}" data-phone="${s.phone}" data-fee="${s.fee}" data-dm='${JSON.stringify(s.dueMonths)}'></td><td style="padding:10px 8px;font-weight:600;color:var(--accent2);">${s.id}</td><td style="padding:10px 8px;">${s.name}</td><td style="padding:10px 8px;">${s.phone||'<span style="color:var(--red)">No phone</span>'}</td><td style="padding:10px 8px;">${s.grade}</td><td style="padding:10px 8px;">Rs.${s.fee.toLocaleString()}</td><td style="padding:10px 8px;"><span style="background:rgba(245,158,11,0.15);color:var(--amber);padding:2px 8px;border-radius:10px;font-size:0.65rem;">${s.dueCount}m</span><br><span style="font-size:0.6rem;color:var(--text2);">${s.dueText}</span></td><td style="padding:10px 8px;font-weight:700;color:var(--red);">Rs.${s.totalDue.toLocaleString()}</td><td style="padding:10px 8px;"><button class="waBtn" data-id="${s.id}" data-name="${s.name.replace(/'/g,"\\'")}" data-phone="${s.phone}" data-fee="${s.fee}" data-dm='${JSON.stringify(s.dueMonths)}' ${!s.phone?'disabled':''} style="background:#25D36620;border:1px solid #25D366;color:#25D366;border-radius:20px;padding:5px 10px;cursor:pointer;font-size:0.7rem;margin-right:4px;"><i class="fab fa-whatsapp"></i></button><button class="smsBtn" data-id="${s.id}" data-name="${s.name.replace(/'/g,"\\'")}" data-phone="${s.phone}" data-fee="${s.fee}" data-dm='${JSON.stringify(s.dueMonths)}' ${!s.phone?'disabled':''} style="background:#0891b220;border:1px solid #0891b2;color:#0891b2;border-radius:20px;padding:5px 10px;cursor:pointer;font-size:0.7rem;"><i class="fas fa-sms"></i></button></td></tr>`).join('');
   let pd=document.getElementById('feePagDiv');
   if(tp<=1){pd.innerHTML='';}else{pd.innerHTML=`<button id="fpPrev" class="btn-main btn-sm" ${feeCP===1?'disabled':''}>◀</button><span style="color:var(--text2);font-size:0.75rem;">${feeCP}/${tp}</span><button id="fpNext" class="btn-main btn-sm" ${feeCP===tp?'disabled':''}>▶</button>`;document.getElementById('fpPrev').onclick=()=>{if(feeCP>1){feeCP--;renderFeeTable();}};document.getElementById('fpNext').onclick=()=>{if(feeCP<tp){feeCP++;renderFeeTable();}};}
   document.getElementById('selAllFee').onclick=e=>document.querySelectorAll('.feeCB').forEach(cb=>cb.checked=e.target.checked);
   document.querySelectorAll('.waBtn').forEach(btn=>btn.onclick=()=>{let d=btn.dataset;showWAConfirm(d.id,d.name,d.phone,d.fee,JSON.parse(d.dm||'[]'));});
+  document.querySelectorAll('.smsBtn').forEach(btn=>btn.onclick=()=>{let d=btn.dataset;showSmsConfirm(d.id,d.name,d.phone,d.fee,JSON.parse(d.dm||'[]'));});
 }
 const SMonths={'January':'ජනවාරි','February':'පෙබරවාරි','March':'මාර්තු','April':'අප්‍රේල්','May':'මැයි','June':'ජූනි','July':'ජූලි','August':'අගෝස්තු','September':'සැප්තැම්බර්','October':'ඔක්තෝබර්','November':'නොවැම්බර්','December':'දෙසැම්බර්'};
 function getSDate(d){const day=d.getDate();const m=d.toLocaleDateString('en-US',{month:'long'});const y=d.getFullYear();return`${y} ${SMonths[m]||m} ${day} වෙනි`;}
@@ -2625,6 +3335,20 @@ function showWAConfirm(id,name,phone,fee,dm){
   if(!phone){Swal.fire({title:'No Phone',text:`No phone for ${name}`,icon:'warning',confirmButtonColor:'#6366f1'});return;}
   let total=dm.length*parseInt(fee);
   Swal.fire({title:'Send WhatsApp?',html:`<b>${name}</b><br>${phone}<br>Due: ${dm.map(m=>`${m.month} ${m.year}`).join(', ')}<br>Total: Rs.${total.toLocaleString()}`,icon:'question',showCancelButton:true,confirmButtonColor:'#25D366',cancelButtonColor:'#f43f5e',confirmButtonText:'Send'}).then(r=>{if(r.isConfirmed)sendWA(id,name,phone,fee,dm);});
+}
+function showSmsConfirm(id,name,phone,fee,dm){
+  if(!phone){Swal.fire({title:'No Phone',text:`No phone for ${name}`,icon:'warning',confirmButtonColor:'#6366f1'});return;}
+  let total=dm.length*parseInt(fee);
+  Swal.fire({title:'Send SMS?',html:`<b>${name}</b><br>${phone}<br>Due: ${dm.map(m=>`${m.month} ${m.year}`).join(', ')}<br>Total: Rs.${total.toLocaleString()}<br><span style="font-size:0.7rem;color:var(--text2);">Sent via TextBee.dev — counts toward daily/monthly SMS limit.</span>`,icon:'question',showCancelButton:true,confirmButtonColor:'#0891b2',cancelButtonColor:'#f43f5e',confirmButtonText:'Send SMS'}).then(r=>{if(r.isConfirmed)sendSmsSingle(id,name,phone,fee,dm);});
+}
+async function sendSmsSingle(id,name,phone,fee,dm){
+  Swal.fire({title:'Sending SMS...',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+  let r=await apiCall('sendFeeReminderSmsManual','GET',{studentId:id,name,phone,fee,dueMonths:JSON.stringify(dm)});
+  if(r&&r.success){
+    Swal.fire({title:'Sent!',text:r.sent?`SMS delivered to ${name}`:`Queued — ${r.stoppedForLimit?'daily/monthly limit reached, will send automatically once quota resets':'will send shortly'}`,icon:'success',timer:2500});
+  } else {
+    Swal.fire({title:r&&r.skipped?'Skipped':'Failed',text:(r&&r.message)||'Could not send SMS',icon:'warning'});
+  }
 }
 function sendWA(id,name,phone,fee,dm){
   let url='https://wa.me/'+cleanPhone(phone)+'?text='+encodeURIComponent(buildWAMsg(name,dm,fee));
@@ -2643,6 +3367,23 @@ async function bulkWASend(){
   let sc=document.getElementById('sentSStat');if(sc)sc.innerText=Object.keys(feeStorage).length;
   Swal.fire({title:'Done!',text:`${sent} sent`,icon:'success'});
 }
+async function bulkSmsSend(){
+  let sel=[...document.querySelectorAll('.feeCB:checked')];if(!sel.length){Swal.fire({title:'Select students',icon:'warning'});return;}
+  let confirm=await Swal.fire({title:'Send SMS to selected?',html:`Send to <b>${sel.length}</b> students via TextBee.dev.<br><span style="font-size:0.75rem;color:var(--text2);">Stops automatically if the daily/monthly SMS limit is reached — the rest stay queued.</span>`,icon:'question',showCancelButton:true,confirmButtonText:'Send All',confirmButtonColor:'#0891b2'});
+  if(!confirm.isConfirmed)return;
+  Swal.fire({title:'Sending SMS...',html:`0 / ${sel.length}`,allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+  let sent=0,skipped=0,limitHit=false;
+  for(let i=0;i<sel.length;i++){
+    let d=sel[i].dataset;
+    if(!d.phone){skipped++;continue;}
+    let dm=JSON.parse(d.dm||'[]');
+    let r=await apiCall('sendFeeReminderSmsManual','GET',{studentId:d.id,name:d.name,phone:d.phone,fee:d.fee,dueMonths:JSON.stringify(dm)});
+    if(r&&r.success&&r.sent)sent++;else skipped++;
+    if(r&&r.stoppedForLimit){limitHit=true;break;}
+    Swal.update({html:`${i+1} / ${sel.length}`});
+  }
+  Swal.fire({title:'Done',html:`Sent: <b>${sent}</b> · Skipped/Failed: <b>${skipped}</b>${limitHit?'<br><span style="color:#f59e0b">Daily/Monthly SMS limit reached — remaining students were left in the pending queue.</span>':''}`,icon:'success'});
+}
 function exportDueExcel(){
   if(!feeDataList.length){Swal.fire({title:'No data',icon:'warning'});return;}
   let data=feeDataList.map(s=>({'ID':s.id,'Name':s.name,'Phone':s.phone,'Grade':s.grade,'Due Months':s.dueText,'Total Due':s.totalDue}));
@@ -2659,6 +3400,166 @@ function printFeeRpt(){
 </script>
 
 <!-- ══════════════════════════════════════════════════════════════
+     SMS SYSTEM (TextBee.dev) — Queue Manager, Dashboard & Logs
+══════════════════════════════════════════════════════════════ -->
+<script>
+window.openSmsManager=function(){
+  let pop=document.getElementById('smsManagerPopup');if(pop){pop.style.display='flex';loadSmsDashboard();return;}
+  pop=document.createElement('div');pop.id='smsManagerPopup';pop.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:100000;display:flex;justify-content:center;align-items:center;';
+  pop.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border2);border-radius:24px;width:96%;max-width:1300px;height:92%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.7);">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-sms" style="color:#0891b2;font-size:1.3rem;"></i><div><h2 style="font-family:Rajdhani,sans-serif;font-size:1.1rem;color:#fff;">SMS Manager</h2><p style="font-size:0.65rem;color:var(--text2);">TextBee.dev Gateway · Free Plan (50/day · 300/month)</p></div></div>
+      <button id="closeSmsManager" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--red);font-size:1.1rem;">✕</button>
+    </div>
+
+    <!-- Usage bars -->
+    <div style="padding:14px 20px 4px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text2);margin-bottom:4px;"><span>Daily Usage</span><span id="smsDailyText">0 / 50</span></div>
+        <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;"><div id="smsDailyBar" style="height:100%;width:0%;background:#0891b2;transition:width 0.3s;"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text2);margin-bottom:4px;"><span>Monthly Usage</span><span id="smsMonthlyText">0 / 300</span></div>
+        <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;"><div id="smsMonthlyBar" style="height:100%;width:0%;background:#7c3aed;transition:width 0.3s;"></div></div>
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);">
+      <div style="text-align:center;padding:10px;background:rgba(8,145,178,0.1);border:1px solid rgba(8,145,178,0.25);border-radius:14px;"><i class="fas fa-paper-plane" style="color:#0891b2;"></i><h3 id="smsSentStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Sent</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;"><i class="fas fa-clock" style="color:var(--amber);"></i><h3 id="smsPendingStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Pending</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:14px;"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i><h3 id="smsFailedStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Failed</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);border-radius:14px;"><i class="fas fa-ban" style="color:var(--text2);"></i><h3 id="smsSkippedStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Skipped</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:14px;"><i class="fas fa-battery-three-quarters" style="color:var(--green);"></i><h3 id="smsRemainStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Left Today</p></div>
+    </div>
+
+    <!-- Controls -->
+    <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+      <button id="smsRetryFailed" class="btn-main btn-sm" style="background:rgba(245,158,11,0.2);border:1px solid var(--amber);color:var(--amber);"><i class="fas fa-redo"></i> Retry Failed</button>
+      <button id="smsRefreshQueue" class="btn-main btn-sm" style="background:rgba(99,102,241,0.2);border:1px solid var(--accent);color:var(--accent2);"><i class="fas fa-play"></i> Process Queue</button>
+      <button id="smsClearCompleted" class="btn-main btn-sm" style="background:rgba(148,163,184,0.15);border:1px solid var(--border2);color:var(--text2);"><i class="fas fa-broom"></i> Clear Completed</button>
+      <button id="smsRefreshStatus" class="btn-main btn-sm" style="background:rgba(16,185,129,0.2);border:1px solid var(--green);color:var(--green);"><i class="fas fa-sync-alt"></i> Refresh</button>
+      <button id="smsResendReg" class="btn-main btn-sm" style="background:rgba(124,58,237,0.2);border:1px solid #7c3aed;color:#7c3aed;"><i class="fas fa-paper-plane"></i> Resend by Student ID</button>
+    </div>
+
+    <!-- Logs table -->
+    <div style="flex:1;overflow:auto;padding:14px 20px;">
+      <p style="font-size:0.7rem;color:var(--text2);margin-bottom:8px;"><i class="fas fa-list"></i> Recent SMS Logs</p>
+      <table style="width:100%;border-collapse:collapse;font-size:0.72rem;min-width:820px;">
+        <thead style="position:sticky;top:0;background:var(--card2);z-index:10;">
+          <tr>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Date/Time</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Student ID</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Name</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Phone</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Type</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Status</th>
+            <th style="padding:8px;text-align:left;color:var(--accent2);border-bottom:1px solid var(--border);">Error</th>
+          </tr>
+        </thead>
+        <tbody id="smsLogsTBody"><tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text2);">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>`;
+  document.body.appendChild(pop);
+  document.getElementById('closeSmsManager').onclick=()=>pop.remove();
+  pop.onclick=e=>{if(e.target===pop)pop.remove();};
+  document.getElementById('smsRetryFailed').onclick=smsRetryFailed;
+  document.getElementById('smsRefreshQueue').onclick=smsProcessQueue;
+  document.getElementById('smsClearCompleted').onclick=smsClearCompleted;
+  document.getElementById('smsRefreshStatus').onclick=loadSmsDashboard;
+  document.getElementById('smsResendReg').onclick=smsResendRegistration;
+  loadSmsDashboard();
+};
+
+function smsStatusBadge(status){
+  const map={
+    'Sent':{bg:'rgba(16,185,129,0.15)',c:'var(--green)'},
+    'Pending':{bg:'rgba(245,158,11,0.15)',c:'var(--amber)'},
+    'Failed':{bg:'rgba(244,63,94,0.15)',c:'var(--red)'},
+    'Skipped':{bg:'rgba(148,163,184,0.15)',c:'var(--text2)'}
+  };
+  const s=map[status]||map['Pending'];
+  return `<span style="background:${s.bg};color:${s.c};padding:2px 8px;border-radius:10px;font-size:0.65rem;">${status}</span>`;
+}
+
+async function loadSmsDashboard(){
+  let [statsR,logsR]=await Promise.all([apiCall('getSmsDashboardStats','GET'),apiCall('getSmsLogs','GET',{limit:100})]);
+  if(statsR&&!statsR.error){
+    let dailyPct=statsR.dailyLimit?Math.min(100,Math.round((statsR.daily/statsR.dailyLimit)*100)):0;
+    let monthlyPct=statsR.monthlyLimit?Math.min(100,Math.round((statsR.monthly/statsR.monthlyLimit)*100)):0;
+    let db=document.getElementById('smsDailyBar');let mb=document.getElementById('smsMonthlyBar');
+    if(db){db.style.width=dailyPct+'%';db.style.background=dailyPct>=80?'var(--red)':'#0891b2';}
+    if(mb){mb.style.width=monthlyPct+'%';mb.style.background=monthlyPct>=80?'var(--red)':'#7c3aed';}
+    let dt=document.getElementById('smsDailyText');if(dt)dt.innerText=`${statsR.daily} / ${statsR.dailyLimit}`;
+    let mt=document.getElementById('smsMonthlyText');if(mt)mt.innerText=`${statsR.monthly} / ${statsR.monthlyLimit}`;
+    let sv=document.getElementById('smsSentStat');if(sv)sv.innerText=statsR.sentCount||0;
+    let pv=document.getElementById('smsPendingStat');if(pv)pv.innerText=statsR.pendingCount||0;
+    let fv=document.getElementById('smsFailedStat');if(fv)fv.innerText=statsR.failedCount||0;
+    let kv=document.getElementById('smsSkippedStat');if(kv)kv.innerText=statsR.skippedCount||0;
+    let rv=document.getElementById('smsRemainStat');if(rv)rv.innerText=statsR.dailyRemaining||0;
+  }
+  let tb=document.getElementById('smsLogsTBody');
+  if(tb){
+    if(logsR&&logsR.success&&logsR.data&&logsR.data.length){
+      tb.innerHTML=logsR.data.map(l=>{
+        let dt=l.DateTime?new Date(l.DateTime).toLocaleString():'-';
+        return `<tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:8px;">${dt}</td>
+          <td style="padding:8px;color:var(--accent2);font-weight:600;">${l.Student_ID||'-'}</td>
+          <td style="padding:8px;">${l.Student_Name||'-'}</td>
+          <td style="padding:8px;">${l.Phone||'-'}</td>
+          <td style="padding:8px;">${l.SMS_Type||'-'}</td>
+          <td style="padding:8px;">${smsStatusBadge(l.Status||'Pending')}</td>
+          <td style="padding:8px;color:var(--red);font-size:0.65rem;">${l.Error||''}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text2);">No SMS logs yet</td></tr>';
+    }
+  }
+}
+
+
+async function smsRetryFailed(){
+  Swal.fire({title:'Retrying...',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+  let r=await apiCall('retryFailedSms','GET');
+  if(r&&r.success){Swal.fire({title:'Retried',text:`${r.reset} failed message(s) re-queued · Sent: ${r.sent} · Failed: ${r.failed}`,icon:'success'});}
+  else{Swal.fire({title:'Error',text:r&&r.message?r.message:'Retry failed',icon:'error'});}
+  loadSmsDashboard();
+}
+
+async function smsProcessQueue(){
+  Swal.fire({title:'Processing Queue...',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+  let r=await apiCall('processSmsQueue','GET');
+  if(r&&r.success){Swal.fire({title:'Queue Processed',text:`Sent: ${r.sent} · Failed: ${r.failed}${r.stoppedForLimit?' · Limit reached, rest pending':''}`,icon:'success'});}
+  else{Swal.fire({title:'Error',text:r&&r.message?r.message:'Queue processing failed',icon:'error'});}
+  loadSmsDashboard();
+}
+
+async function smsClearCompleted(){
+  let confirm=await Swal.fire({title:'Clear Completed?',text:'Removes Sent/Skipped rows from the queue (logs are kept).',icon:'question',showCancelButton:true,confirmButtonColor:'#6366f1'});
+  if(!confirm.isConfirmed)return;
+  let r=await apiCall('clearCompletedSmsQueue','GET');
+  if(r&&r.success){Swal.fire({title:'Cleared',text:`${r.removed} row(s) removed`,icon:'success',timer:1800});}
+  loadSmsDashboard();
+}
+
+async function smsResendRegistration(){
+  let {value:sid}=await Swal.fire({title:'Resend Registration SMS',input:'text',inputLabel:'Student ID',inputPlaceholder:'e.g. STU1234',showCancelButton:true,confirmButtonColor:'#7c3aed',confirmButtonText:'Resend'});
+  if(!sid)return;
+  Swal.fire({title:'Resending...',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});
+  let r=await apiCall('resendRegistrationSms','GET',{studentId:sid});
+  if(r&&r.success){
+    Swal.fire({title:'Sent',text:`SMS re-queued and sent for ${sid}. Sent: ${r.sent} · Failed: ${r.failed}`,icon:'success'});
+  } else {
+    Swal.fire({title:'Could not resend',text:(r&&r.message)||(r&&r.queueResult&&r.queueResult.message)||'Check the phone number in the Registration sheet and try again.',icon:'error'});
+  }
+  loadSmsDashboard();
+}
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
      PRINT SYSTEM (preserved)
 ══════════════════════════════════════════════════════════════ -->
 <script>
@@ -2669,9 +3570,186 @@ function initPrintButtons(){
     let b2=document.createElement('div');b2.className='action-btn';b2.setAttribute('data-section','printcard');b2.innerHTML='<i class="fas fa-id-card"></i>Print Card';b2.onclick=showPrintCardModal;sg.appendChild(b2);
   }
 }
+// ── DATE HELPERS — Sri Lanka timezone, no UTC shifting ──
+function fixDate(dateStr) {
+  if (!dateStr) return '';
+  return String(dateStr).split('T')[0].substring(0,10);
+}
+function formatDisplayDate(dateStr) {
+  if (!dateStr) return '-';
+  const s = fixDate(dateStr);
+  if (!s.match(/^\d{4}-\d{2}-\d{2}$/)) return String(dateStr);
+  const [y,m,d] = s.split('-');
+  const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d} ${mn[Number(m)-1]} ${y}`;
+}
+
+// FIXED: Use local date parsing — not Date.UTC — to match Google Sheets date exactly
 function getExactBirth(bv){
   if(!bv||bv==='')return{formatted:'Not Provided',yearOnly:null};
-  try{let y,m,d;let s=String(bv);const match=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(match){y=parseInt(match[1]);m=parseInt(match[2])-1;d=parseInt(match[3]);}else{const parts=s.split(/[-/\s]/);if(parts[0].length===4){y=parseInt(parts[0]);m=parseInt(parts[1])-1;d=parseInt(parts[2]);}else{d=parseInt(parts[0]);m=parseInt(parts[1])-1;y=parseInt(parts[2]);}}const ed=new Date(Date.UTC(y,m,d));ed.setUTCDate(ed.getUTCDate()+1);const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];return{formatted:`${mn[ed.getUTCMonth()]} ${ed.getUTCDate()}, ${ed.getUTCFullYear()}`,yearOnly:ed.getUTCFullYear()};}catch(e){return{formatted:String(bv),yearOnly:null};}
+  try{
+    const s=fixDate(String(bv));
+    const match=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(match){
+      const y=parseInt(match[1]),m=parseInt(match[2]),d=parseInt(match[3]);
+      const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+      return{formatted:`${mn[m-1]} ${d}, ${y}`,yearOnly:y};
+    }
+    return{formatted:String(bv),yearOnly:null};
+  }catch(e){return{formatted:String(bv),yearOnly:null};}
+}
+
+// ── GRADE FEE MANAGEMENT UI ──────────────────────
+async function showGradeFeeUI() {
+  showLoader(true);
+  const r = await apiCall('getGradeFeePrices','GET');
+  showLoader(false);
+  const grades = r.success && r.data ? r.data : Array.from({length:13},(_,i)=>({grade:i+1,monthly_fee:1000,status:'Active'}));
+
+  openModal(`<div class="modal-box" style="max-width:700px;">
+    <div class="modal-head"><h2><i class="fas fa-money-bill-wave" style="color:var(--green);"></i> Grade Fee Prices</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <p style="font-size:0.78rem;color:var(--text2);margin-bottom:14px;">Set a direct monthly fee for each grade. This fee is automatically used when marking payments.</p>
+    <div style="max-height:420px;overflow-y:auto;">
+      <table class="tbl" style="min-width:400px;">
+        <thead><tr><th>Grade</th><th>Monthly Fee (Rs.)</th><th>Status</th></tr></thead>
+        <tbody id="gradeFeeTableBody">
+          ${grades.map(g=>`<tr>
+            <td style="font-weight:700;color:var(--accent2);">Grade ${g.grade}</td>
+            <td><input type="number" id="gfee_${g.grade}" value="${g.monthly_fee}" min="0" style="width:120px;border-radius:8px;padding:5px 10px;font-size:0.82rem;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td>
+            <td><select id="gst_${g.grade}" style="border-radius:8px;padding:5px;font-size:0.78rem;background:var(--card2);border:1px solid var(--border);color:var(--text);">
+              <option value="Active" ${g.status==='Active'?'selected':''}>Active</option>
+              <option value="Inactive" ${g.status==='Inactive'?'selected':''}>Inactive</option>
+            </select></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn-main" style="flex:1;" onclick="saveGradeFees()"><i class="fas fa-save"></i> Save All Grade Fees</button>
+      <button class="btn-main" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>`);
+}
+
+async function saveGradeFees() {
+  const fees = [];
+  for (let g = 1; g <= 13; g++) {
+    const feeEl = document.getElementById(`gfee_${g}`);
+    const stEl  = document.getElementById(`gst_${g}`);
+    if (feeEl) fees.push({ grade:g, fee:Number(feeEl.value)||0, status:stEl?stEl.value:'Active' });
+  }
+  showLoader(true);
+  const r = await apiCall('setGradeFeePrices','POST',{fees});
+  showLoader(false);
+  if (r.success) { showToast('Grade fees saved!'); closeModal(); }
+  else showToast(r.message||'Failed to save',true);
+}
+
+// ══════════════════════════════════════════════════
+// TEMPORARY STUDENTS (O/L Paper Class, A/L Paper Class, Spoken English) — NEW v10
+// ══════════════════════════════════════════════════
+async function showTempStudentsUI(){
+  showLoader(true);const r=await apiCall('getAllTempStudents','GET');showLoader(false);
+  const list=r.success?r.data:[];
+  const filterChips=`<div class="grade-chips" id="tempFilterChips">
+    <div class="grade-chip active" data-f="all">All (${list.length})</div>
+    ${TEMP_GRADES.map(g=>`<div class="grade-chip" data-f="${g}">${g} (${list.filter(s=>s.grade===g).length})</div>`).join('')}
+  </div>`;
+  const renderRows=(arr)=>arr.map(s=>`<tr>
+    <td style="font-weight:700;color:#ec4899;">${s.id}</td><td>${s.name}</td><td>${s.grade}</td><td>${s.phone}</td>
+    <td><span style="background:${s.status==='Active'?'rgba(16,185,129,0.15)':'rgba(244,63,94,0.15)'};color:${s.status==='Active'?'var(--green)':'var(--red)'};padding:2px 8px;border-radius:8px;font-size:0.65rem;">${s.status}</span></td>
+    <td><div style="display:flex;gap:4px;">
+      <button class="btn-main btn-sm temp-edit-btn" data-id="${s.id}"><i class="fas fa-edit"></i></button>
+      <button class="btn-main btn-sm temp-del-btn" data-id="${s.id}" style="background:rgba(244,63,94,0.2);color:var(--red);border:1px solid var(--red);"><i class="fas fa-trash"></i></button>
+    </div></td>
+  </tr>`).join('');
+  openModal(`<div class="modal-box" style="max-width:900px;">
+    <div class="modal-head"><h2><i class="fas fa-user-graduate" style="color:#ec4899;"></i> Paper / Spoken English Students</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    ${filterChips}
+    <div class="tbl-wrap" style="max-height:420px;overflow-y:auto;"><table class="tbl">
+      <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Phone</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="tempStuBody">${renderRows(list)}</tbody>
+    </table></div>
+  </div>`);
+  const wireRowButtons=(arr)=>{
+    document.querySelectorAll('.temp-edit-btn').forEach(b=>b.addEventListener('click',()=>showTempEditModal(arr.find(s=>s.id===b.dataset.id))));
+    document.querySelectorAll('.temp-del-btn').forEach(b=>b.addEventListener('click',async()=>{
+      if(!confirm(`Delete ${b.dataset.id}? This cannot be undone.`))return;
+      showLoader(true);const dr=await apiCall('deleteTempStudent','POST',{id:b.dataset.id});showLoader(false);
+      if(dr.success){showToast('Deleted');closeModal();showTempStudentsUI();}else showToast(dr.message||'Failed',true);
+    }));
+  };
+  wireRowButtons(list);
+  document.querySelectorAll('#tempFilterChips .grade-chip').forEach(chip=>chip.addEventListener('click',function(){
+    document.querySelectorAll('#tempFilterChips .grade-chip').forEach(c=>c.classList.remove('active'));
+    this.classList.add('active');
+    const f=this.dataset.f;
+    const filtered=f==='all'?list:list.filter(s=>s.grade===f);
+    document.getElementById('tempStuBody').innerHTML=renderRows(filtered);
+    wireRowButtons(filtered);
+  }));
+}
+
+function showTempEditModal(s){
+  if(!s)return;
+  openModal(mbox(`<i class="fas fa-edit"></i> Edit — ${s.id}`,`
+    <form id="tempEditForm">
+      <input name="id" value="${s.id}" readonly style="display:none;">
+      <div class="grid2">
+        <div class="form-group"><label>Name</label><input name="name" value="${s.name||''}"></div>
+        <div class="form-group"><label>Phone</label><input name="phone" value="${s.phone||''}"></div>
+      </div>
+      <div class="grid2">
+        <div class="form-group"><label>NIC</label><input name="nic" value="${s.nic||''}"></div>
+        <div class="form-group"><label>Exam Index Number</label><input name="examIndexNumber" value="${s.examIndexNumber||''}"></div>
+      </div>
+      <div class="grid2">
+        <div class="form-group"><label>Exam Year</label><input name="examYear" value="${s.examYear||''}"></div>
+        <div class="form-group"><label>Status</label><select name="status"><option ${s.status==='Active'?'selected':''}>Active</option><option ${s.status==='Inactive'?'selected':''}>Inactive</option></select></div>
+      </div>
+      <div class="form-group"><label>Address</label><input name="address" value="${s.address||''}"></div>
+      <div class="flex-row"><button type="submit" class="btn-main">Save</button><button type="button" class="btn-main btn-danger" onclick="closeModal()">Cancel</button></div>
+    </form>`));
+  document.getElementById('tempEditForm').onsubmit=async function(e){
+    e.preventDefault();const fd=new FormData(e.target);const data={};fd.forEach((v,k)=>data[k]=v);
+    showLoader(true);const r=await apiCall('updateTempStudent','POST',data);showLoader(false);
+    if(r.success){showToast('Updated!');closeModal();showTempStudentsUI();}else showToast(r.message||'Failed',true);
+  };
+}
+
+async function showTempFeeUI(){
+  showLoader(true);const [r,ps]=await Promise.all([apiCall('getTempCategoryFees','GET'),apiCall('getPortalSettings','GET')]);showLoader(false);
+  const cats=r.success&&r.data.length?r.data:TEMP_GRADES.map(c=>({category:c,monthly_fee:1000,status:'Active'}));
+  openModal(`<div class="modal-box" style="max-width:600px;">
+    <div class="modal-head"><h2><i class="fas fa-tag" style="color:#ec4899;"></i> Paper / Spoken Fees</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <p style="font-size:0.78rem;color:var(--text2);margin-bottom:14px;">Monthly fee for each category. Used automatically for both stand-alone temp students and the Grade 11/13 add-on.</p>
+    <table class="tbl">
+      <thead><tr><th>Category</th><th>Monthly Fee (Rs.)</th></tr></thead>
+      <tbody>${cats.map(c=>`<tr><td style="font-weight:700;color:#ec4899;">${c.category}</td><td><input type="number" class="tfee-input" data-cat="${c.category}" value="${c.monthly_fee}" min="0" style="width:120px;border-radius:8px;padding:5px 10px;font-size:0.82rem;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td></tr>`).join('')}</tbody>
+    </table>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn-main" style="flex:1;" id="saveTempFeeBtn"><i class="fas fa-save"></i> Save</button>
+      <button class="btn-main" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);" onclick="closeModal()">Cancel</button>
+    </div>
+    <hr style="border-color:var(--border);margin:16px 0;">
+    <p style="font-size:0.78rem;color:var(--text2);margin-bottom:10px;"><i class="fas fa-hourglass-half"></i> Exam Countdown Dates (shown on student home page)</p>
+    <div class="grid2">
+      <div class="form-group"><label>O/L Exam Date</label><input type="date" id="olExamDateInput" value="${ps.olExamDate||''}"></div>
+      <div class="form-group"><label>A/L Exam Date</label><input type="date" id="alExamDateInput" value="${ps.alExamDate||''}"></div>
+    </div>
+    <button class="btn-main" id="saveExamDatesBtn" style="width:100%;margin-top:6px;"><i class="fas fa-save"></i> Save Exam Dates</button>
+  </div>`);
+  document.getElementById('saveTempFeeBtn').onclick=async function(){
+    const fees=[];document.querySelectorAll('.tfee-input').forEach(inp=>fees.push({category:inp.dataset.cat,fee:Number(inp.value)||0}));
+    showLoader(true);const sr=await apiCall('setTempCategoryFees','POST',{fees});showLoader(false);
+    if(sr.success){showToast('Fees saved!');closeModal();}else showToast(sr.message||'Failed',true);
+  };
+  document.getElementById('saveExamDatesBtn').onclick=async function(){
+    const olExamDate=document.getElementById('olExamDateInput').value;
+    const alExamDate=document.getElementById('alExamDateInput').value;
+    showLoader(true);const sr=await apiCall('setPortalSettings','POST',{olExamDate,alExamDate});showLoader(false);
+    if(sr.success)showToast('Exam dates saved!');else showToast(sr.message||'Failed',true);
+  };
 }
 async function showPrintListModal(){
   showLoader(true);const sr=await apiCall('getAllStudents','GET');showLoader(false);
@@ -2845,14 +3923,21 @@ function getFullHTML(cards, year) {
 body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#e8ecf0;padding:16px;}
 
 /* ── CARD CONTAINER ── */
-.premium-card-container{margin-bottom:24px;page-break-inside:avoid;break-inside:avoid;}
+.premium-card-container{margin-bottom:24px;page-break-inside:avoid;break-inside:avoid;display:flex;justify-content:center;}
 .premium-card{
   background:#ffffff;
   border-radius:16px;overflow:hidden;
   border:1.5px solid #4caf50;
   box-shadow:0 4px 20px rgba(0,0,0,0.12);
-  max-width:780px;margin:0 auto;
+  /* A4 size: 210mm × 297mm — the card itself IS one A4 page, on screen and in print */
+  width:210mm;height:297mm;
+  max-width:210mm;min-height:297mm;
+  box-sizing:border-box;
+  margin:0 auto;
+  display:flex;flex-direction:column;
 }
+.premium-card > *{flex-shrink:0;}
+.card-body-premium{flex:1;}
 
 /* ── HEADER ── */
 .card-header-premium{
@@ -2947,16 +4032,37 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#e8ecf0;padding:
 .btn-close:hover{background:rgba(255,255,255,0.2);}
 
 @media print{
-  body{background:white;padding:0;}
-  @page{size:A4;margin:1cm;}
-  .premium-card-container{break-inside:avoid;page-break-inside:avoid;margin-bottom:0;}
+  body{background:white;padding:0;margin:0;}
+  @page{size:A4 portrait;margin:0;}
+  .premium-card-container{
+    break-inside:avoid;page-break-inside:avoid;
+    margin-bottom:0;
+    page-break-after:always;break-after:page;
+  }
+  .premium-card-container:last-child{page-break-after:auto;break-after:auto;}
   .print-controls{display:none!important;}
+  .premium-card{
+    border:1.5px solid #4caf50;box-shadow:none;
+  }
+  /* Tighter print padding to fit A4 */
+  .card-header-premium{padding:10px 14px;}
+  .student-premium{padding:8px 14px;}
+  .payment-grid-premium{padding:10px 14px;gap:6px;}
+  .footer-premium{padding:10px 14px;}
+  .note-premium{padding:6px 14px;}
+  .month-card{padding:7px 5px;}
+  .month-short{font-size:11px;}
+  .month-full{font-size:6px;}
+  .payment-date-row{font-size:7px;margin:4px 0 3px;}
+  .payment-amount-row{font-size:8px;margin:3px 0;padding:2px 0;}
+  .sig-row{margin-top:4px;padding-top:3px;}
   .payment-grid-premium{grid-template-columns:repeat(4,1fr);}
   .student-grid{grid-template-columns:repeat(4,1fr);}
-  .premium-card{border:1px solid #4caf50;box-shadow:none;}
   .note-premium,.footer-premium,.student-premium,.card-header-premium{
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
   }
+  /* Prevent overflow */
+  *{overflow:visible!important;max-width:100%!important;}
 }
 </style>
 </head>
