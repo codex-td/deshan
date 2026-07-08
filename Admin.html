@@ -1389,7 +1389,7 @@ setInterval(()=>{
      MAIN APP SCRIPT
 ══════════════════════════════════════════════════════════════ -->
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycby2xVAurk1Z3nHkAg1U3iNqDmD9ZI-aa6RNZ_Kq5Aw8DDEpf8ekzQXzuLpgGfZgHAIiTw/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzGKRAegMAs0tSynuaVw9ImYU_WDo2l20ME3K5N_qyjWvVi6pimfHdPxnayVPffP3cw_w/exec";
 // NOTE: 'var' (not const/let) here on purpose — it attaches these to `window`,
 // guaranteeing they're visible from every other <script> block on the page,
 // no matter what order things load in or how the file is opened.
@@ -3733,9 +3733,10 @@ async function showTempFeeUI(){
     </div>
     <hr style="border-color:var(--border);margin:16px 0;">
     <p style="font-size:0.78rem;color:var(--text2);margin-bottom:10px;"><i class="fas fa-hourglass-half"></i> Exam Countdown Dates (shown on student home page)</p>
+    <p style="font-size:0.66rem;color:var(--text3);margin:-4px 0 10px;"><i class="fas fa-info-circle"></i> Tap the field and use the calendar picker — don't type the date manually, it can save wrong.</p>
     <div class="grid2">
-      <div class="form-group"><label>O/L Exam Date</label><input type="date" id="olExamDateInput" value="${ps.olExamDate||''}"></div>
-      <div class="form-group"><label>A/L Exam Date</label><input type="date" id="alExamDateInput" value="${ps.alExamDate||''}"></div>
+      <div class="form-group"><label>O/L Exam Date</label><input type="date" id="olExamDateInput" value="${ps.olExamDate||''}"><div id="olExamPreview" style="font-size:0.66rem;color:var(--accent2);margin-top:4px;min-height:14px;"></div></div>
+      <div class="form-group"><label>A/L Exam Date</label><input type="date" id="alExamDateInput" value="${ps.alExamDate||''}"><div id="alExamPreview" style="font-size:0.66rem;color:var(--accent2);margin-top:4px;min-height:14px;"></div></div>
     </div>
     <button class="btn-main" id="saveExamDatesBtn" style="width:100%;margin-top:6px;"><i class="fas fa-save"></i> Save Exam Dates</button>
   </div>`);
@@ -3744,9 +3745,35 @@ async function showTempFeeUI(){
     showLoader(true);const sr=await apiCall('setTempCategoryFees','POST',{fees});showLoader(false);
     if(sr.success){showToast('Fees saved!');closeModal();}else showToast(sr.message||'Failed',true);
   };
+  // NEW: live preview — shows the exact date + days remaining as soon as a value is picked,
+  // so a mistyped/garbled date (e.g. wrong year) is obvious BEFORE saving, not after.
+  const updateExamPreview=(inputId,previewId)=>{
+    const val=document.getElementById(inputId).value;
+    const el=document.getElementById(previewId);
+    if(!val){el.textContent='';return;}
+    const d=new Date(val+'T00:00:00');
+    if(isNaN(d.getTime())){el.textContent='⚠ Invalid date';el.style.color='var(--red)';return;}
+    const days=Math.ceil((d-new Date())/86400000);
+    el.style.color='var(--accent2)';
+    el.textContent=`→ ${d.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'long',day:'numeric'})} (${days>=0?days+' days from today':'in the past'})`;
+  };
+  document.getElementById('olExamDateInput').addEventListener('input',()=>updateExamPreview('olExamDateInput','olExamPreview'));
+  document.getElementById('alExamDateInput').addEventListener('input',()=>updateExamPreview('alExamDateInput','alExamPreview'));
+  updateExamPreview('olExamDateInput','olExamPreview');
+  updateExamPreview('alExamDateInput','alExamPreview');
   document.getElementById('saveExamDatesBtn').onclick=async function(){
     const olExamDate=document.getElementById('olExamDateInput').value;
     const alExamDate=document.getElementById('alExamDateInput').value;
+    // Sanity check: exam dates shouldn't realistically be more than ~400 days out — catches
+    // a mistyped/garbled date (wrong year etc.) before it gets saved and confuses the countdown.
+    const suspicious=[olExamDate,alExamDate].some(v=>{
+      if(!v)return false;
+      const d=new Date(v+'T00:00:00');
+      if(isNaN(d.getTime()))return true;
+      const days=(d-new Date())/86400000;
+      return days>400||days<-30;
+    });
+    if(suspicious&&!confirm('One of the exam dates looks unusual (far in the future/past or invalid). Save anyway?'))return;
     showLoader(true);const sr=await apiCall('setPortalSettings','POST',{olExamDate,alExamDate});showLoader(false);
     if(sr.success)showToast('Exam dates saved!');else showToast(sr.message||'Failed',true);
   };
