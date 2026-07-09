@@ -1000,7 +1000,16 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
         <input type="text" id="globalSearch" placeholder="Search student or ID...">
       </div>
       <div class="nav-right">
-        <div id="notifWrap" class="notif-wrap"><i class="far fa-bell" style="font-size:1rem;color:var(--text2);cursor:pointer;"></i><span class="notif-dot" id="notifBadge">0</span></div>
+        <div id="notifWrap" class="notif-wrap" style="position:relative;cursor:pointer;">
+          <i class="far fa-bell" style="font-size:1rem;color:var(--text2);"></i><span class="notif-dot" id="notifBadge">0</span>
+          <div id="notifDropdown" style="display:none;position:fixed;top:64px;right:16px;width:320px;max-width:calc(100vw - 32px);max-height:400px;overflow-y:auto;background:var(--card1,var(--surf1));border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,0.45);z-index:5000;">
+            <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700;font-size:0.8rem;color:var(--text);display:flex;justify-content:space-between;align-items:center;">
+              <span><i class="fas fa-bell"></i> Notifications</span>
+              <span id="notifMarkAllBtn" style="font-size:0.65rem;color:var(--accent2);cursor:pointer;font-weight:500;">Mark all read</span>
+            </div>
+            <div id="notifList" style="padding:6px;"></div>
+          </div>
+        </div>
         <div class="sync-row" style="padding:0;border:none;"><span class="sync-dot"></span><span class="sync-label-nav">Synced</span></div>
         <button class="nav-btn" id="themeToggleBtn" title="Toggle Light/Dark Mode" style="padding:6px 10px;min-width:34px;">
           <i class="fas fa-sun" id="themeIcon"></i>
@@ -1389,7 +1398,7 @@ setInterval(()=>{
      MAIN APP SCRIPT
 ══════════════════════════════════════════════════════════════ -->
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzGKRAegMAs0tSynuaVw9ImYU_WDo2l20ME3K5N_qyjWvVi6pimfHdPxnayVPffP3cw_w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbztOqDmQKa4PHCQu8nN-YqcXugsDAz7GKdn_aJ1Nvofy54QH3d9ocKl34ygIkP4-eF3Wg/exec";
 // NOTE: 'var' (not const/let) here on purpose — it attaches these to `window`,
 // guaranteeing they're visible from every other <script> block on the page,
 // no matter what order things load in or how the file is opened.
@@ -2578,7 +2587,68 @@ function renderStudentTable(data){
 }
 window.quickUpdateStudent=function(id){showUpdateModal();setTimeout(()=>{let el=document.getElementById('updateId');if(el){el.value=id;document.getElementById('fetchStudentBtn')?.click();}},200);};
 
-async function loadPendingCount(){let r=await apiCall('getPendingRegistrations','GET');if(r.success){let c=r.data.length;document.getElementById('pendingCount').innerText=c;document.getElementById('notifBadge').innerText=c;document.getElementById('actPendingTitle').innerText=`Pending: ${c}`;}}
+async function loadPendingCount(){let r=await apiCall('getPendingRegistrations','GET');if(r.success){let c=r.data.length;document.getElementById('pendingCount').innerText=c;document.getElementById('actPendingTitle').innerText=`Pending: ${c}`;}}
+
+// ══════════════════════════════════════════════════
+// NOTIFICATION SYSTEM (NEW) — polls the Notifications sheet every ~25s and
+// shows a dropdown list in the bell icon. "Read" state is tracked locally
+// (per-browser) since admin notifications can be viewed by more than one device.
+// ══════════════════════════════════════════════════
+let notifReadIds=new Set(JSON.parse(localStorage.getItem('admin_notif_read')||'[]'));
+let notifCache=[];
+function timeAgo(iso){
+  const diff=(new Date()-new Date(iso))/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+const notifIcon={registration:'fa-user-plus',assignment:'fa-book',achievement:'fa-medal',exam:'fa-chart-line'};
+function renderNotifDropdown(){
+  const list=document.getElementById('notifList');
+  if(!notifCache.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:0.75rem;">No notifications yet</div>';return;}
+  list.innerHTML=notifCache.map(n=>{
+    const unread=!notifReadIds.has(n.id);
+    return `<div style="padding:9px 10px;border-radius:10px;margin-bottom:3px;display:flex;gap:9px;align-items:flex-start;${unread?'background:rgba(99,102,241,0.08);':''}">
+      <div style="width:28px;height:28px;border-radius:50%;background:rgba(99,102,241,0.15);color:var(--accent2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;"><i class="fas ${notifIcon[n.type]||'fa-bell'}"></i></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--text);">${n.title}</div>
+        <div style="font-size:0.68rem;color:var(--text2);margin-top:1px;">${n.message}</div>
+        <div style="font-size:0.6rem;color:var(--text3);margin-top:3px;">${timeAgo(n.createdAt)}</div>
+      </div>
+      ${unread?'<span style="width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px;"></span>':''}
+    </div>`;
+  }).join('');
+}
+function updateNotifBadge(){
+  const unreadCount=notifCache.filter(n=>!notifReadIds.has(n.id)).length;
+  const badge=document.getElementById('notifBadge');
+  badge.innerText=unreadCount;
+  badge.style.display=unreadCount>0?'flex':'none';
+}
+async function pollNotifications(){
+  const r=await apiCall('getAdminNotifications','GET');
+  if(r.success){notifCache=r.data;updateNotifBadge();if(document.getElementById('notifDropdown').style.display==='block')renderNotifDropdown();}
+}
+document.getElementById('notifWrap')?.addEventListener('click',(e)=>{
+  const dd=document.getElementById('notifDropdown');
+  const opening=dd.style.display!=='block';
+  dd.style.display=opening?'block':'none';
+  if(opening)renderNotifDropdown();
+  e.stopPropagation();
+});
+document.addEventListener('click',(e)=>{
+  const dd=document.getElementById('notifDropdown');
+  if(dd&&dd.style.display==='block'&&!dd.contains(e.target)&&e.target.id!=='notifWrap')dd.style.display='none';
+});
+document.getElementById('notifMarkAllBtn')?.addEventListener('click',(e)=>{
+  e.stopPropagation();
+  notifCache.forEach(n=>notifReadIds.add(n.id));
+  localStorage.setItem('admin_notif_read',JSON.stringify([...notifReadIds]));
+  updateNotifBadge();renderNotifDropdown();
+});
+pollNotifications();
+setInterval(pollNotifications,25000);
 
 // ─── LOGIN ─────────────────────────────────────────────
 let loginAttempts=0;
