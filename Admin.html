@@ -195,7 +195,7 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
 .page-title{
   display:flex;align-items:center;gap:10px;margin-bottom:20px;
 }
-.page-title h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;}
+.page-title h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);}
 .page-title span{font-size:0.7rem;color:var(--text2);padding:3px 10px;background:rgba(99,102,241,0.15);border-radius:20px;border:1px solid var(--border);}
 
 /* ─── HERO CARD (the 3D styled card like image) ─── */
@@ -265,11 +265,11 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
 .donut-label-center{
   position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
-.donut-val{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;}
+.donut-val{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);}
 .donut-sub{font-size:0.55rem;color:var(--text2);letter-spacing:0.05em;}
 .kpi-badge{
   display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;
-  font-size:0.65rem;font-weight:600;color:#fff;
+  font-size:0.65rem;font-weight:600;color:var(--text);
   background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);
 }
 .kpi-badge.warn{background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.4);}
@@ -282,7 +282,7 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
   border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;
 }
 .activity-item-left{display:flex;flex-direction:column;gap:2px;}
-.activity-title{font-size:0.75rem;font-weight:600;color:#fff;}
+.activity-title{font-size:0.75rem;font-weight:600;color:var(--text);}
 .activity-sub{font-size:0.62rem;color:var(--text2);}
 .activity-arrow{color:var(--text3);font-size:0.7rem;}
 
@@ -314,7 +314,7 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
 .s5 .stat-icon{background:rgba(244,63,94,0.15);color:#f43f5e;}
 .s5{border-color:rgba(244,63,94,0.2);animation:defPulse 3s ease-in-out infinite;}
 @keyframes defPulse{0%,100%{border-color:rgba(244,63,94,0.2);}50%{border-color:rgba(244,63,94,0.45);box-shadow:0 4px 16px rgba(0,0,0,0.4),0 0 12px rgba(244,63,94,0.15);}}
-.stat-val{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1;}
+.stat-val{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:var(--text);line-height:1;}
 .stat-label{font-size:0.68rem;color:var(--text2);margin-top:4px;}
 .stat-change{font-size:0.6rem;margin-top:6px;color:var(--green);}
 .stat-change.neg{color:var(--red);}
@@ -342,7 +342,7 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
   width:100%;box-sizing:border-box;overflow:hidden;
 }
 .table-topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
-.table-topbar h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;color:#fff;}
+.table-topbar h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;color:var(--text);}
 .t-tag{
   padding:3px 10px;border-radius:12px;font-size:0.65rem;font-weight:600;
   background:rgba(99,102,241,0.15);color:var(--accent2);border:1px solid var(--border);cursor:pointer;
@@ -423,7 +423,7 @@ body.light-mode .sync-label,.light-mode .sync-label-nav{color:var(--text2)!impor
   box-sizing:border-box;overflow-x:hidden;
 }
 .modal-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px;}
-.modal-head h2{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;}
+.modal-head h2{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);}
 .modal-close{background:none;border:none;font-size:20px;color:var(--text2);cursor:pointer;}
 .form-group{margin-bottom:12px;}
 .form-group label{display:block;font-size:0.72rem;font-weight:600;color:var(--accent2);margin-bottom:4px;letter-spacing:0.04em;}
@@ -1235,7 +1235,7 @@ button.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,1
               <div class="action-btn" data-section="filter"><i class="fas fa-filter"></i>ID Filter</div>
               <div class="action-btn" data-section="datafilter"><i class="fas fa-database"></i>Data Viewer</div>
               <div class="action-btn" data-section="promote"><i class="fas fa-arrow-up"></i>Promote</div>
-              <div class="action-btn" data-section="whatsapp"><i class="fab fa-whatsapp"></i>WhatsApp</div>
+              <div class="action-btn" data-section="whatsapp">WhatsApp</div>
               <div class="action-btn" data-section="sms" style="border-color:rgba(8,145,178,0.5);"><i class="fas fa-sms"></i>SMS</div>
               <!-- NEW FEE MANAGEMENT BUTTONS -->
               <div class="action-btn" data-section="feemgmt" style="border-color:rgba(99,102,241,0.5);"><i class="fas fa-tags"></i>Fee Config</div>
@@ -3325,7 +3325,7 @@ window.openFeeReminder=function(){
   pop=document.createElement('div');pop.id='feeReminderPopup';pop.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:100000;display:flex;justify-content:center;align-items:center;';
   pop.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border2);border-radius:24px;width:96%;max-width:1400px;height:92%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.7);">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-bell" style="color:var(--accent2);font-size:1.3rem;"></i><div><h2 style="font-family:Rajdhani,sans-serif;font-size:1.1rem;color:#fff;">Fee Reminder Manager</h2><p style="font-size:0.65rem;color:var(--text2);">Due students only (After 21st)</p></div></div>
+      <div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-bell" style="color:var(--accent2);font-size:1.3rem;"></i><div><h2 style="font-family:Rajdhani,sans-serif;font-size:1.1rem;color:var(--text);">Fee Reminder Manager</h2><p style="font-size:0.65rem;color:var(--text2);">Due students only (After 21st)</p></div></div>
       <button id="closeFeeReminder" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--red);font-size:1.1rem;">✕</button>
     </div>
     <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
@@ -3338,10 +3338,10 @@ window.openFeeReminder=function(){
       <button id="printFeeReport" class="btn-main btn-sm" style="background:rgba(245,158,11,0.2);border:1px solid var(--amber);color:var(--amber);"><i class="fas fa-print"></i> Print</button>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);">
-      <div style="text-align:center;padding:10px;background:rgba(99,102,241,0.1);border:1px solid var(--border);border-radius:14px;"><i class="fas fa-users" style="color:var(--accent2);"></i><h3 id="totalCStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.65rem;color:var(--text2);">Due Students</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:14px;"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i><h3 id="dueMStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.65rem;color:var(--text2);">Pending Months</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;"><i class="fas fa-coins" style="color:var(--amber);"></i><h3 id="totalAStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">Rs.0</h3><p style="font-size:0.65rem;color:var(--text2);">Total Due</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.2);border-radius:14px;"><i class="fab fa-whatsapp" style="color:#25D366;"></i><h3 id="sentSStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.65rem;color:var(--text2);">Sent</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(99,102,241,0.1);border:1px solid var(--border);border-radius:14px;"><i class="fas fa-users" style="color:var(--accent2);"></i><h3 id="totalCStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.65rem;color:var(--text2);">Due Students</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:14px;"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i><h3 id="dueMStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.65rem;color:var(--text2);">Pending Months</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;"><i class="fas fa-coins" style="color:var(--amber);"></i><h3 id="totalAStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">Rs.0</h3><p style="font-size:0.65rem;color:var(--text2);">Total Due</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.2);border-radius:14px;"><i class="fab fa-whatsapp" style="color:#25D366;"></i><h3 id="sentSStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.65rem;color:var(--text2);">Sent</p></div>
     </div>
     <div style="flex:1;overflow:auto;padding:14px 20px;">
       <table style="width:100%;border-collapse:collapse;font-size:0.75rem;min-width:900px;">
@@ -3478,7 +3478,7 @@ window.openSmsManager=function(){
   pop=document.createElement('div');pop.id='smsManagerPopup';pop.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:100000;display:flex;justify-content:center;align-items:center;';
   pop.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border2);border-radius:24px;width:96%;max-width:1300px;height:92%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.7);">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border);">
-      <div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-sms" style="color:#0891b2;font-size:1.3rem;"></i><div><h2 style="font-family:Rajdhani,sans-serif;font-size:1.1rem;color:#fff;">SMS Manager</h2><p style="font-size:0.65rem;color:var(--text2);">TextBee.dev Gateway · Free Plan (50/day · 300/month)</p></div></div>
+      <div style="display:flex;align-items:center;gap:10px;"><i class="fas fa-sms" style="color:#0891b2;font-size:1.3rem;"></i><div><h2 style="font-family:Rajdhani,sans-serif;font-size:1.1rem;color:var(--text);">SMS Manager</h2><p style="font-size:0.65rem;color:var(--text2);">TextBee.dev Gateway · Free Plan (50/day · 300/month)</p></div></div>
       <button id="closeSmsManager" style="background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--red);font-size:1.1rem;">✕</button>
     </div>
 
@@ -3496,11 +3496,11 @@ window.openSmsManager=function(){
 
     <!-- Stat cards -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);">
-      <div style="text-align:center;padding:10px;background:rgba(8,145,178,0.1);border:1px solid rgba(8,145,178,0.25);border-radius:14px;"><i class="fas fa-paper-plane" style="color:#0891b2;"></i><h3 id="smsSentStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Sent</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;"><i class="fas fa-clock" style="color:var(--amber);"></i><h3 id="smsPendingStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Pending</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:14px;"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i><h3 id="smsFailedStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Failed</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);border-radius:14px;"><i class="fas fa-ban" style="color:var(--text2);"></i><h3 id="smsSkippedStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Skipped</p></div>
-      <div style="text-align:center;padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:14px;"><i class="fas fa-battery-three-quarters" style="color:var(--green);"></i><h3 id="smsRemainStat" style="font-size:1.1rem;margin:4px 0;color:#fff;">0</h3><p style="font-size:0.6rem;color:var(--text2);">Left Today</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(8,145,178,0.1);border:1px solid rgba(8,145,178,0.25);border-radius:14px;"><i class="fas fa-paper-plane" style="color:#0891b2;"></i><h3 id="smsSentStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.6rem;color:var(--text2);">Sent</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;"><i class="fas fa-clock" style="color:var(--amber);"></i><h3 id="smsPendingStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.6rem;color:var(--text2);">Pending</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.2);border-radius:14px;"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i><h3 id="smsFailedStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.6rem;color:var(--text2);">Failed</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);border-radius:14px;"><i class="fas fa-ban" style="color:var(--text2);"></i><h3 id="smsSkippedStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.6rem;color:var(--text2);">Skipped</p></div>
+      <div style="text-align:center;padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:14px;"><i class="fas fa-battery-three-quarters" style="color:var(--green);"></i><h3 id="smsRemainStat" style="font-size:1.1rem;margin:4px 0;color:var(--text);">0</h3><p style="font-size:0.6rem;color:var(--text2);">Left Today</p></div>
     </div>
 
     <!-- Controls -->
@@ -3940,9 +3940,9 @@ function getCardHTML(s,year,teacher){
             <p>Payment Tracker &bull; ${year}</p>
           </div>
         </div>
-        <div style="text-align:right;">
-          <p style="font-size:13px;font-weight:700;color:#2e7d32;">${teacher}</p>
-          <p style="font-size:8px;color:#66bb6a;">English &amp; Soft Skills</p>
+        <div class="institute-premium">
+          <p class="teacher-premium">${teacher}</p>
+          <p class="institute-premium-title">English &amp; Soft Skills</p>
         </div>
       </div>
 
@@ -3956,7 +3956,7 @@ function getCardHTML(s,year,teacher){
         </div>
       </div>
 
-      <!-- PAYMENT GRID — 12 months in 4 rows x 3 cols -->
+      <!-- PAYMENT GRID — 12 months, 3 cols x 4 rows -->
       <div class="payment-grid-premium">
         ${pcMonths.map((m,i)=>`
           <div class="month-card">
@@ -3964,13 +3964,16 @@ function getCardHTML(s,year,teacher){
               <span class="month-short">${m}</span>
               <span class="month-full">${pcFullM[i]}</span>
             </div>
-            <div class="payment-date-row">
-              <span class="date-label">Date:</span>
-              <span class="date-line">___________</span>
+            <div class="payment-status">
+              <span class="status-line">__________</span>
             </div>
-            <div class="payment-amount-row">Rs. ___________</div>
-            <div class="sig-row">
-              <span class="sig-label">Sig:</span>
+            <div class="payment-date">
+              <span class="date-label">Date:</span>
+              <span class="date-line">__________</span>
+            </div>
+            <div class="payment-amount">Rs. _ _ _ _</div>
+            <div class="signature-placeholder">
+              <span>Signature</span>
               <div class="sig-line-sm"></div>
             </div>
           </div>`).join('')}
@@ -3978,23 +3981,21 @@ function getCardHTML(s,year,teacher){
 
       <!-- FOOTER -->
       <div class="footer-premium">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,#2e7d32,#4caf50);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-            <i class="fas fa-qrcode" style="font-size:20px;color:white;"></i>
-          </div>
-          <div>
-            <p style="font-size:8px;font-weight:700;color:#2e7d32;">SCAN TO VERIFY</p>
-            <small style="font-size:7px;color:#888;">${s.id||''} | ${year}</small>
+        <div class="qr-premium">
+          <div class="qr-code"><i class="fas fa-qrcode"></i></div>
+          <div class="qr-info">
+            <p>SCAN TO VERIFY</p>
+            <small>${s.id||''} | ${year}</small>
           </div>
         </div>
-        <div style="text-align:center;">
-          <p style="font-size:8px;font-weight:700;color:#2e7d32;letter-spacing:1px;">PAYMENT MARK</p>
-          <p style="font-size:10px;letter-spacing:2px;color:#999;">${year}</p>
+        <div class="payment-mark">
+          <p>PAYMENT MARK</p>
+          <p class="mark-line">${year}</p>
         </div>
-        <div style="text-align:center;">
-          <div style="width:100px;border-bottom:1px solid #4caf50;margin:0 auto 5px;"></div>
-          <p style="font-size:10px;font-weight:700;color:#2e7d32;">${teacher.split(' ')[0]}</p>
-          <p style="font-size:7px;color:#888;">Teacher's Signature</p>
+        <div class="signature-premium">
+          <div class="signature-line"></div>
+          <p class="signature-name">${teacher.split(' ')[0]}</p>
+          <p class="signature-title">Teacher's Signature</p>
         </div>
       </div>
 
@@ -4017,161 +4018,132 @@ function getFullHTML(cards, year) {
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#e8ecf0;padding:16px;}
+body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:#e0e5ec;padding:0;margin:0;}
 
 /* ── CARD CONTAINER ── */
-.premium-card-container{margin-bottom:24px;page-break-inside:avoid;break-inside:avoid;display:flex;justify-content:center;}
+.premium-card-container{width:100%;max-width:none;margin:0;padding:0;page-break-inside:avoid;}
 .premium-card{
-  background:#ffffff;
+  width:100%;
+  background:url('https://www.transparenttextures.com/patterns/white-paperboard.png'),#ffffff;
+  background-size:auto;background-repeat:repeat;
   border-radius:16px;overflow:hidden;
-  border:1.5px solid #4caf50;
-  box-shadow:0 4px 20px rgba(0,0,0,0.12);
-  /* A4 size: 210mm × 297mm — the card itself IS one A4 page, on screen and in print */
-  width:210mm;height:297mm;
-  max-width:210mm;min-height:297mm;
-  box-sizing:border-box;
-  margin:0 auto;
-  display:flex;flex-direction:column;
+  border:1px solid #4caf50;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
-.premium-card > *{flex-shrink:0;}
-.card-body-premium{flex:1;}
 
-/* ── HEADER ── */
+/* ── HEADER (transparent bg, green border) ── */
 .card-header-premium{
   display:flex;justify-content:space-between;align-items:center;
-  padding:16px 22px;background:transparent;
-  border-bottom:2px solid #4caf50;
+  padding:18px 24px;background:transparent;
+  border-bottom:2px solid #4caf50;position:relative;z-index:1;
 }
-.logo-premium{display:flex;align-items:center;gap:12px;}
+.logo-premium{display:flex;align-items:center;gap:14px;}
 .logo-circle{
-  width:44px;height:44px;
+  width:48px;height:48px;
   background:linear-gradient(135deg,#2e7d32,#4caf50);
-  border-radius:22px 10px 22px 10px;
+  border-radius:24px 12px 24px 12px;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 2px 8px rgba(46,125,50,0.3);
 }
-.logo-circle i{font-size:22px;color:white;}
-.logo-title h1{font-size:15px;font-weight:800;color:#1b5e20;letter-spacing:1px;margin-bottom:2px;}
-.logo-title p{font-size:8px;color:#4caf50;}
+.logo-circle i{font-size:24px;color:white;}
+.logo-title h1{font-size:16px;font-weight:800;color:#1b5e20;letter-spacing:1px;}
+.logo-title p{font-size:9px;color:#4caf50;}
+.institute-premium{text-align:right;}
+.teacher-premium{font-size:13px;font-weight:700;color:#2e7d32;}
+.institute-premium-title{font-size:8px;color:#66bb6a;}
 
 /* ── STUDENT INFO ── */
-.student-premium{padding:14px 22px;background:#f9fefb;border-bottom:1px solid #e0ede2;}
-.student-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.student-premium{padding:16px 24px;background:rgba(255,255,255,0.95);border-bottom:1px solid #e0e5ec;}
+.student-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 .student-field label{
-  display:block;font-size:7.5px;font-weight:700;
+  display:block;font-size:8px;font-weight:700;
   text-transform:uppercase;letter-spacing:1px;
-  color:#2e7d32;margin-bottom:3px;
+  color:#2e7d32;margin-bottom:4px;
 }
-.student-field span{font-size:12px;font-weight:700;color:#1b5e20;}
+.student-field span{display:block;font-size:12px;font-weight:600;color:#1b5e20;}
 
-/* ── PAYMENT GRID ── */
+/* ── PAYMENT GRID (3 cols x 4 rows) ── */
 .payment-grid-premium{
   display:grid;
-  grid-template-columns:repeat(4,1fr);/* 4 columns = 3 rows for 12 months */
-  gap:10px;padding:16px 22px;
-  background:#ffffff;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;padding:20px 24px;
+  background:rgba(255,255,255,0.92);
 }
 .month-card{
-  background:#ffffff;border-radius:10px;padding:10px 8px;
+  background:white;border-radius:12px;padding:12px 10px;
   text-align:center;border:1px solid #c8e6c9;
-  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
 }
-.month-name{margin-bottom:6px;}
-.month-short{display:block;font-size:13px;font-weight:800;color:#2e7d32;}
-.month-full{display:block;font-size:7px;color:#999;}
-.payment-date-row{
-  font-size:8px;color:#555;margin:6px 0 4px;
-  display:flex;align-items:center;gap:3px;justify-content:center;
-}
-.date-label{font-weight:600;color:#2e7d32;white-space:nowrap;}
-.date-line{color:#ccc;letter-spacing:1px;flex:1;text-align:left;}
-.payment-amount-row{
-  font-size:9px;font-weight:600;color:#555;margin:5px 0;
-  padding:3px 0;border-top:1px dashed #e0e0e0;border-bottom:1px dashed #e0e0e0;
-}
-.sig-row{
-  display:flex;align-items:center;gap:4px;margin-top:6px;
-  padding-top:5px;border-top:1px solid #c8e6c9;
-}
-.sig-label{font-size:7px;color:#888;white-space:nowrap;}
-.sig-line-sm{flex:1;height:1px;border-bottom:1px solid #ddd;}
+.month-name .month-short{display:block;font-size:13px;font-weight:800;color:#2e7d32;}
+.month-name .month-full{display:block;font-size:7px;color:#999;}
+.payment-status{font-size:9px;margin:8px 0;}
+.status-line{color:#bbb;letter-spacing:1px;}
+.payment-date{font-size:8px;color:#666;margin:6px 0;}
+.date-label{font-weight:600;color:#2e7d32;}
+.date-line{letter-spacing:1px;color:#bbb;}
+.payment-amount{font-size:11px;font-weight:600;color:#555;display:inline-block;padding:4px 12px;margin:6px 0;}
+.signature-placeholder{margin-top:8px;padding-top:6px;border-top:1px solid #c8e6c9;}
+.signature-placeholder span{font-size:7px;color:#888;display:block;margin-bottom:4px;}
+.sig-line-sm{width:100%;height:1px;border-bottom:1px solid #ddd;}
 
 /* ── FOOTER ── */
 .footer-premium{
   display:flex;justify-content:space-between;align-items:center;
-  padding:14px 22px;background:#f9fefb;
-  border-top:1px solid #c8e6c9;flex-wrap:wrap;gap:12px;
+  padding:16px 24px;background:rgba(248,249,250,0.95);
+  border-top:1px solid #c8e6c9;flex-wrap:wrap;gap:15px;
 }
+.qr-premium{display:flex;align-items:center;gap:10px;}
+.qr-code{width:45px;height:45px;background:linear-gradient(135deg,#2e7d32,#4caf50);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.qr-code i{font-size:22px;color:white;}
+.qr-info p{font-size:8px;font-weight:700;color:#2e7d32;}
+.qr-info small{font-size:7px;color:#888;}
+.payment-mark{text-align:center;}
+.payment-mark p:first-child{font-size:8px;font-weight:700;color:#2e7d32;}
+.mark-line{font-size:10px;letter-spacing:2px;color:#999;}
+.signature-premium{text-align:center;}
+.signature-line{width:100px;border-bottom:1px solid #4caf50;margin:0 auto 5px;}
+.signature-name{font-size:10px;font-weight:700;color:#2e7d32;}
+.signature-title{font-size:7px;color:#888;}
 
 /* ── NOTE ── */
-.note-premium{
-  padding:10px 22px;text-align:center;
-  background:#e8f5e9;border-top:1px solid #c8e6c9;
-}
+.note-premium{padding:12px 24px;text-align:center;background:rgba(232,245,233,0.95);border-top:1px solid #c8e6c9;}
 .note-premium p{font-size:8px;color:#555;}
 
 /* ── PAGE BREAK ── */
 .page-break{page-break-before:always;break-before:always;}
 
 /* ── PRINT CONTROLS ── */
-.print-controls{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#1b2333;padding:12px;
-  display:flex;justify-content:center;gap:10px;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.4);z-index:999;
-}
-.print-controls button{
-  padding:10px 28px;border:none;border-radius:24px;
-  font-size:14px;font-weight:700;cursor:pointer;
-}
-.btn-print{background:linear-gradient(135deg,#2e7d32,#4caf50);color:white;}
-.btn-close{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2)!important;}
-.btn-close:hover{background:rgba(255,255,255,0.2);}
+.no-print{display:block;text-align:center;margin-top:20px;padding:15px;position:fixed;bottom:0;left:0;right:0;background:#f0f4f8;}
+.no-print button{border:none;padding:12px 35px;border-radius:30px;cursor:pointer;font-size:14px;margin:5px;font-weight:600;}
+.btn-print{background:#2e7d32;color:white;}
+.btn-close{background:#e74c3c;color:white;}
 
 @media print{
   body{background:white;padding:0;margin:0;}
-  @page{size:A4 portrait;margin:0;}
+  @page{size:A4;margin:0.8cm;}
   .premium-card-container{
     break-inside:avoid;page-break-inside:avoid;
-    margin-bottom:0;
-    page-break-after:always;break-after:page;
+    margin:0;padding:0;
   }
-  .premium-card-container:last-child{page-break-after:auto;break-after:auto;}
-  .print-controls{display:none!important;}
-  .premium-card{
-    border:1.5px solid #4caf50;box-shadow:none;
-  }
-  /* Tighter print padding to fit A4 */
-  .card-header-premium{padding:10px 14px;}
-  .student-premium{padding:8px 14px;}
-  .payment-grid-premium{padding:10px 14px;gap:6px;}
-  .footer-premium{padding:10px 14px;}
-  .note-premium{padding:6px 14px;}
-  .month-card{padding:7px 5px;}
-  .month-short{font-size:11px;}
-  .month-full{font-size:6px;}
-  .payment-date-row{font-size:7px;margin:4px 0 3px;}
-  .payment-amount-row{font-size:8px;margin:3px 0;padding:2px 0;}
-  .sig-row{margin-top:4px;padding-top:3px;}
-  .payment-grid-premium{grid-template-columns:repeat(4,1fr);}
-  .student-grid{grid-template-columns:repeat(4,1fr);}
-  .note-premium,.footer-premium,.student-premium,.card-header-premium{
-    -webkit-print-color-adjust:exact;print-color-adjust:exact;
-  }
-  /* Prevent overflow */
-  *{overflow:visible!important;max-width:100%!important;}
+  .premium-card{border:1px solid #000!important;box-shadow:none!important;background:white!important;}
+  .student-field label{color:#2e7d32!important;}
+  .student-field span{color:#1b5e20!important;}
+  .card-header-premium{border-bottom:2px solid #2e7d32!important;}
+  .no-print{display:none!important;}
+}
+
+@media (max-width:650px){
+  .payment-grid-premium{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .student-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .card-header-premium,.student-premium,.payment-grid-premium,.footer-premium,.note-premium{padding-left:16px;padding-right:16px;}
 }
 </style>
 </head>
 <body>
 ${cards}
-<div class="print-controls">
-  <button class="btn-print" onclick="window.print()">
-    <i class="fas fa-print"></i> Print / Save as PDF
-  </button>
-  <button class="btn-close" onclick="window.close()">
-    <i class="fas fa-times"></i> Close
-  </button>
+<div class="no-print">
+  <button class="btn-print" onclick="window.print();"><i class="fas fa-print"></i> Print / Save as PDF</button>
+  <button class="btn-close" onclick="window.close();"><i class="fas fa-times"></i> Close</button>
 </div>
 <script>
   // Auto-prompt print after slight delay
