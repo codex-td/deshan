@@ -1020,94 +1020,97 @@ body.light-mode .bnav{box-shadow:0 -4px 40px rgba(37,60,120,.12), var(--nm-out),
         </div>
       </div>
       <div class="hdr-actions">
+        <div class="hbtn" id="studentNotifBtn" title="Notifications" style="position:relative;">
+          <i class="fas fa-bell"></i>
+          <span id="studentNotifBadge" style="display:none;position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:var(--red,#ef4444);border-radius:50%;align-items:center;justify-content:center;font-size:.5rem;color:#fff;font-weight:700;">0</span>
+        </div>
         <div class="hbtn" id="logoutBtn" title="Logout"><i class="fas fa-sign-out-alt"></i></div>
         <div class="hbtn" onclick="openProfileModal('view')" title="Profile"><i class="fas fa-user-circle"></i></div>
       </div>
     </div>
 
-    <!-- WELCOME -->
-    <div class="welcome-card">
-      <div class="wc-tag">// PORTAL ACTIVE</div>
-      <div class="wc-name">Welcome back,<br><span id="welcomeName">Student</span> 👋</div>
-      <div class="wc-sub" id="timeGreeting">Stay focused on your goals 🌟</div>
-      <div class="wc-clock">
-        <div class="wc-time" id="liveClock">00:00:00</div>
-        <div class="wc-date" id="liveDate">—</div>
-      </div>
-    </div>
-
-    <!-- STREAK -->
-    <div class="streak-card">
-      <div class="sk-em">🔥</div>
-      <div class="sk-main">
-        <div class="sk-val">7 Day Streak</div>
-        <div class="sk-sub">Keep up your learning momentum!</div>
-        <div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--t3);margin:7px 0 4px"><span>Weekly goal</span><span>70%</span></div>
-        <div class="sk-bar"><div class="sk-fill"></div></div>
-      </div>
-    </div>
-
-    <!-- STATS -->
-    <div class="stat-strip">
-      <div class="stat-tile">
-        <div class="st-icon"><i class="fas fa-layer-group"></i></div>
-        <div class="st-val" id="profileGradeStat">—</div>
-        <div class="st-lbl">Grade</div>
-      </div>
-      <div class="stat-tile">
-        <div class="st-icon"><i class="fas fa-wifi"></i></div>
-        <div class="st-val" id="inClassStatus">—</div>
-        <div class="st-lbl">Today</div>
-      </div>
-      <div class="stat-tile">
-        <div class="st-icon"><i class="fas fa-history"></i></div>
-        <div class="st-val" id="lastAttendDate" style="font-size:.6rem">—</div>
-        <div class="st-lbl">Last Visit</div>
-      </div>
-    </div>
-
-    <!-- ALERT -->
+    <!-- ALERT (stays visible across all tabs — payment due is important everywhere) -->
     <div class="pay-alert" id="paymentAlert">
       <i class="fas fa-exclamation-triangle"></i>
       <span id="paymentAlertMsg">Pending payment! Please pay before month end.</span>
     </div>
 
-    <!-- ── EXAM COUNTDOWN — flip-clock style (NEW v11) ── -->
-    <div class="flip-countdown-card" id="examCountdownCard" style="display:none;">
-      <div class="flip-countdown-title" id="examCountdownTitle">EXAM COUNTDOWN</div>
-      <div class="flip-clock-wrap">
-        <div class="flip-unit">
-          <div class="flip-digits"><div class="flip-tile" id="fcDaysTens">0</div><div class="flip-tile" id="fcDaysOnes">0</div><div class="flip-tile" id="fcDaysHund">0</div></div>
-          <div class="flip-label">DAYS</div>
-        </div>
-        <div class="flip-colon">:</div>
-        <div class="flip-unit">
-          <div class="flip-digits"><div class="flip-tile" id="fcHoursTens">0</div><div class="flip-tile" id="fcHoursOnes">0</div></div>
-          <div class="flip-label">HRS</div>
-        </div>
-        <div class="flip-colon">:</div>
-        <div class="flip-unit">
-          <div class="flip-digits"><div class="flip-tile" id="fcMinTens">0</div><div class="flip-tile" id="fcMinOnes">0</div></div>
-          <div class="flip-label">MIN</div>
-        </div>
-        <div class="flip-colon">:</div>
-        <div class="flip-unit">
-          <div class="flip-digits"><div class="flip-tile" id="fcSecTens">0</div><div class="flip-tile" id="fcSecOnes">0</div></div>
-          <div class="flip-label">SEC</div>
-        </div>
-      </div>
-      <div id="examCountdownSub" style="font-size:.62rem;color:var(--t3);margin-top:10px;letter-spacing:.5px;"></div>
-    </div>
-
-    <!-- ── ADD-ON UPSELL (NEW v10) ── -->
-    <div class="pay-alert" id="addonUpsellCard" style="display:none;background:rgba(37,99,255,.12);border-color:rgba(37,99,255,.4);">
-      <i class="fas fa-star"></i>
-      <span id="addonUpsellMsg">Add O/L Paper Class to your account!</span>
-      <button id="addonUpsellBtn" class="btn-line" style="margin-left:auto;width:auto;padding:4px 12px;border-radius:20px;font-size:.68rem;">Add Now</button>
-    </div>
-
     <!-- HOME CARD -->
     <div id="homeCard" class="feature-card active">
+      <!-- WELCOME -->
+      <div class="welcome-card">
+        <div class="wc-tag">// PORTAL ACTIVE</div>
+        <div class="wc-name">Welcome back,<br><span id="welcomeName">Student</span> 👋</div>
+        <div class="wc-sub" id="timeGreeting">Stay focused on your goals 🌟</div>
+        <div class="wc-clock">
+          <div class="wc-time" id="liveClock">00:00:00</div>
+          <div class="wc-date" id="liveDate">—</div>
+        </div>
+      </div>
+
+      <!-- STREAK -->
+      <div class="streak-card">
+        <div class="sk-em">🔥</div>
+        <div class="sk-main">
+          <div class="sk-val">7 Day Streak</div>
+          <div class="sk-sub">Keep up your learning momentum!</div>
+          <div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--t3);margin:7px 0 4px"><span>Weekly goal</span><span>70%</span></div>
+          <div class="sk-bar"><div class="sk-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stat-strip">
+        <div class="stat-tile">
+          <div class="st-icon"><i class="fas fa-layer-group"></i></div>
+          <div class="st-val" id="profileGradeStat">—</div>
+          <div class="st-lbl">Grade</div>
+        </div>
+        <div class="stat-tile">
+          <div class="st-icon"><i class="fas fa-wifi"></i></div>
+          <div class="st-val" id="inClassStatus">—</div>
+          <div class="st-lbl">Today</div>
+        </div>
+        <div class="stat-tile">
+          <div class="st-icon"><i class="fas fa-history"></i></div>
+          <div class="st-val" id="lastAttendDate" style="font-size:.6rem">—</div>
+          <div class="st-lbl">Last Visit</div>
+        </div>
+      </div>
+
+      <!-- ── EXAM COUNTDOWN — flip-clock style (NEW v11) ── -->
+      <div class="flip-countdown-card" id="examCountdownCard" style="display:none;">
+        <div class="flip-countdown-title" id="examCountdownTitle">EXAM COUNTDOWN</div>
+        <div class="flip-clock-wrap">
+          <div class="flip-unit">
+            <div class="flip-digits"><div class="flip-tile" id="fcDaysHund">0</div><div class="flip-tile" id="fcDaysTens">0</div><div class="flip-tile" id="fcDaysOnes">0</div></div>
+            <div class="flip-label">DAYS</div>
+          </div>
+          <div class="flip-colon">:</div>
+          <div class="flip-unit">
+            <div class="flip-digits"><div class="flip-tile" id="fcHoursTens">0</div><div class="flip-tile" id="fcHoursOnes">0</div></div>
+            <div class="flip-label">HRS</div>
+          </div>
+          <div class="flip-colon">:</div>
+          <div class="flip-unit">
+            <div class="flip-digits"><div class="flip-tile" id="fcMinTens">0</div><div class="flip-tile" id="fcMinOnes">0</div></div>
+            <div class="flip-label">MIN</div>
+          </div>
+          <div class="flip-colon">:</div>
+          <div class="flip-unit">
+            <div class="flip-digits"><div class="flip-tile" id="fcSecTens">0</div><div class="flip-tile" id="fcSecOnes">0</div></div>
+            <div class="flip-label">SEC</div>
+          </div>
+        </div>
+        <div id="examCountdownSub" style="font-size:.62rem;color:var(--t3);margin-top:10px;letter-spacing:.5px;"></div>
+      </div>
+
+      <!-- ── ADD-ON UPSELL (NEW v10) ── -->
+      <div class="pay-alert" id="addonUpsellCard" style="display:none;background:rgba(37,99,255,.12);border-color:rgba(37,99,255,.4);">
+        <i class="fas fa-star"></i>
+        <span id="addonUpsellMsg">Add O/L Paper Class to your account!</span>
+        <button id="addonUpsellBtn" class="btn-line" style="margin-left:auto;width:auto;padding:4px 12px;border-radius:20px;font-size:.68rem;">Add Now</button>
+      </div>
 
       <!-- ── ASSIGNMENT LIST VIEW ── -->
       <div id="assignmentListView">
@@ -1258,6 +1261,20 @@ body.light-mode .bnav{box-shadow:0 -4px 40px rgba(37,60,120,.12), var(--nm-out),
   <div class="modal-box" id="profileModalContent"></div>
 </div>
 
+<!-- NOTIFICATION MODAL (NEW — same proven overlay pattern as Profile modal, guaranteed to render above every card) -->
+<div class="modal-overlay" id="studentNotifModal">
+  <div class="modal-box" style="max-width:380px;padding:0;overflow:hidden;">
+    <div style="padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-weight:800;font-size:.9rem;color:var(--t1);"><i class="fas fa-bell" style="color:var(--blue2);margin-right:6px;"></i>Notifications</span>
+      <span id="studentNotifMarkAllBtn" style="font-size:.65rem;color:var(--blue2);cursor:pointer;font-weight:600;">Mark all read</span>
+    </div>
+    <div id="studentNotifList" style="padding:8px;max-height:60vh;overflow-y:auto;"></div>
+    <div style="padding:12px 18px;border-top:1px solid var(--border);">
+      <button class="btn-line" onclick="closeStudentNotifModal()" style="margin:0;">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- RECEIPT MODAL -->
 <div id="receiptModal" class="receipt-modal">
   <div class="receipt-modal-content">
@@ -1287,7 +1304,7 @@ body.light-mode .bnav{box-shadow:0 -4px 40px rgba(37,60,120,.12), var(--nm-out),
 // SKILLNEST STUDENT PORTAL
 // ========================
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzGKRAegMAs0tSynuaVw9ImYU_WDo2l20ME3K5N_qyjWvVi6pimfHdPxnayVPffP3cw_w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbztOqDmQKa4PHCQu8nN-YqcXugsDAz7GKdn_aJ1Nvofy54QH3d9ocKl34ygIkP4-eF3Wg/exec";
 
 // Validate SCRIPT_URL on startup
 (async function checkDeployment(){
@@ -1432,6 +1449,97 @@ async function initRegGradeGating(){
     else note.style.display='none';
   }
 }
+
+// ══════════════════════════════════════════════════
+// NOTIFICATION SYSTEM (NEW) — new assignment / achievement / exam marks.
+// Polls the backend every ~25s while logged in. "Read" state tracked locally
+// per-browser (localStorage), keyed by student ID so switching accounts on
+// the same device doesn't mix up read-status between students.
+// ══════════════════════════════════════════════════
+let studentNotifTimer=null;
+let studentNotifCache=[];
+function getStudentNotifReadIds(){
+  if(!currentStudent)return new Set();
+  return new Set(JSON.parse(localStorage.getItem('notif_read_'+currentStudent.id)||'[]'));
+}
+function saveStudentNotifReadIds(set){
+  if(!currentStudent)return;
+  localStorage.setItem('notif_read_'+currentStudent.id, JSON.stringify([...set]));
+}
+function studentTimeAgo(iso){
+  const diff=(new Date()-new Date(iso))/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+const studentNotifIcon={registration:'fa-user-plus',assignment:'fa-book',achievement:'fa-medal',exam:'fa-chart-line'};
+function renderStudentNotifDropdown(){
+  const list=document.getElementById('studentNotifList');
+  const readIds=getStudentNotifReadIds();
+  if(!studentNotifCache.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--t3);font-size:.72rem;">No notifications yet</div>';return;}
+  list.innerHTML=studentNotifCache.map(n=>{
+    const unread=!readIds.has(n.id);
+    return `<div style="padding:9px 10px;border-radius:10px;margin-bottom:3px;display:flex;gap:9px;align-items:flex-start;${unread?'background:rgba(37,99,255,.08);':''}">
+      <div style="width:26px;height:26px;border-radius:50%;background:rgba(37,99,255,.15);color:var(--blue2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;"><i class="fas ${studentNotifIcon[n.type]||'fa-bell'}"></i></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--t1);">${n.title}</div>
+        <div style="font-size:.66rem;color:var(--t2);margin-top:1px;">${n.message}</div>
+        <div style="font-size:.58rem;color:var(--t3);margin-top:3px;">${studentTimeAgo(n.createdAt)}</div>
+      </div>
+      ${unread?'<span style="width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:5px;"></span>':''}
+    </div>`;
+  }).join('');
+}
+function updateStudentNotifBadge(){
+  const readIds=getStudentNotifReadIds();
+  const unreadCount=studentNotifCache.filter(n=>!readIds.has(n.id)).length;
+  const badge=document.getElementById('studentNotifBadge');
+  if(!badge)return;
+  badge.innerText=unreadCount;
+  badge.style.display=unreadCount>0?'flex':'none';
+}
+async function pollStudentNotifications(){
+  if(!currentStudent)return;
+  const extraGrade=currentStudent.additionalBuy||'';
+  const r=await apiCall('getStudentNotifications','GET',{id:currentStudent.id, grade:currentStudent.grade, extraGrade});
+  if(r.success){
+    studentNotifCache=r.data;
+    updateStudentNotifBadge();
+    if(document.getElementById('studentNotifModal')?.style.display==='flex')renderStudentNotifDropdown();
+  }
+}
+function startStudentNotifPolling(){
+  pollStudentNotifications();
+  if(studentNotifTimer)clearInterval(studentNotifTimer);
+  studentNotifTimer=setInterval(pollStudentNotifications,25000);
+}
+function stopStudentNotifPolling(){
+  if(studentNotifTimer){clearInterval(studentNotifTimer);studentNotifTimer=null;}
+  studentNotifCache=[];
+  const badge=document.getElementById('studentNotifBadge');
+  if(badge)badge.style.display='none';
+}
+function closeStudentNotifModal(){
+  const m=document.getElementById('studentNotifModal');
+  if(m)m.style.display='none';
+}
+document.getElementById('studentNotifBtn')?.addEventListener('click',()=>{
+  const m=document.getElementById('studentNotifModal');
+  if(!m)return;
+  m.style.display='flex';
+  renderStudentNotifDropdown();
+});
+document.getElementById('studentNotifModal')?.addEventListener('click',(e)=>{
+  if(e.target.id==='studentNotifModal')closeStudentNotifModal(); // click outside the box closes it
+});
+document.getElementById('studentNotifMarkAllBtn')?.addEventListener('click',(e)=>{
+  e.stopPropagation();
+  const readIds=getStudentNotifReadIds();
+  studentNotifCache.forEach(n=>readIds.add(n.id));
+  saveStudentNotifReadIds(readIds);
+  updateStudentNotifBadge();renderStudentNotifDropdown();
+});
 
 function escapeHtml(str){
   if(str===null||str===undefined)return'';
@@ -2374,6 +2482,7 @@ async function performLogin(){
     document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
     document.querySelector('.ni[data-card="homeCard"]')?.classList.add('active');
     document.getElementById('loginId').value='';document.getElementById('loginPass').value='';
+    startStudentNotifPolling();
   }else{showLoader(false);showToast('Invalid credentials',true);}
 }
 
@@ -2456,7 +2565,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('loginId')?.addEventListener('keydown',e=>{if(e.key==='Enter')performLogin();});
   document.getElementById('loginPass')?.addEventListener('keydown',e=>{if(e.key==='Enter')performLogin();});
   document.getElementById('quickRegLink')?.addEventListener('click',()=>{document.getElementById('loginPanel').classList.add('hidden-panel');document.getElementById('selfRegPanel').classList.remove('hidden-panel');initRegGradeGating();});
-  document.getElementById('logoutBtn')?.addEventListener('click',()=>{currentStudent=null;if(pieChart)pieChart.destroy();document.getElementById('dashboardPanel').classList.add('hidden-panel');document.getElementById('loginPanel').classList.remove('hidden-panel');document.getElementById('bottomNav').style.display='none';cacheStore.clear();showToast('Logged out');});
+  document.getElementById('logoutBtn')?.addEventListener('click',()=>{currentStudent=null;if(pieChart)pieChart.destroy();stopStudentNotifPolling();document.getElementById('dashboardPanel').classList.add('hidden-panel');document.getElementById('loginPanel').classList.remove('hidden-panel');document.getElementById('bottomNav').style.display='none';cacheStore.clear();showToast('Logged out');});
   document.getElementById('forgotBtn')?.addEventListener('click',()=>{const id=document.getElementById('loginId').value.trim()||'unknown';window.open(`https://wa.me/94754551129?text=Password recovery for ID: ${id}`,'_blank');});
   document.getElementById('joinRequestBtn')?.addEventListener('click',()=>window.open('https://wa.me/94767899845?text=I would like to join your class','_blank'));
   document.getElementById('showRegFormBtn')?.addEventListener('click',()=>{document.getElementById('loginPanel').classList.add('hidden-panel');document.getElementById('selfRegPanel').classList.remove('hidden-panel');initRegGradeGating();});
